@@ -2,7 +2,9 @@ class Character {
     constructor(game) {
         this._game = game;
         this._position = new Position(0, 0);
+        this._size = new Size(50, 100);
         this._direction = "right";
+        this._speed = BLOCK_WIDTH / 2;
     }
 
     set position(newPosition) {
@@ -11,6 +13,14 @@ class Character {
 
     get position() {
         return (this._position);
+    }
+
+    get size() {
+        return (this._size);
+    }
+
+    set size(newSize) {
+        this._size = newSize;
     }
 
     moveX(xMovement) {
@@ -30,6 +40,6 @@ class Character {
     }
 
     render() {
-        this._game._resManager.displayImage("pablo", this._position, new Size(50, 100));
+        this._game._resManager.displayImage("pablo", this._position, this._size);
     }
 }

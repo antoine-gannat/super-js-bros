@@ -17,11 +17,16 @@ class Game {
 
         // The map
         this._map = new Map(this);
+
+        // The physics
+        this._phisics = new Physics(this);
     }
 
     renderFrame() {
         // clear the canvas
         this._ctx.clearRect(0, 0, this._canvas.width, this._canvas.height);
+
+        this._phisics.applyGravityToCharacter(this._character);
         // Display the map
         this._map.render();
         // Display the character

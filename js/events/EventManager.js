@@ -9,8 +9,7 @@ class EventManager {
         this._key_map = [
             { key: "ArrowRight", callback: this.moveCharacterRight.bind(this) },
             { key: "ArrowLeft", callback: this.moveCharacterLeft.bind(this) },
-            { key: "ArrowDown", callback: this.moveCharacterDown.bind(this) },
-            { key: "ArrowUp", callback: this.moveCharacterUp.bind(this) },
+            { key: " ", callback: this.jump.bind(this) },
         ];
     }
 
@@ -29,18 +28,15 @@ class EventManager {
     // Event callbacks
 
     moveCharacterRight() {
-        this._game._character.moveX(1);
+        this._game._character.moveX(this._game._character._speed);
     }
 
     moveCharacterLeft() {
-        this._game._character.moveX(-1);
+        this._game._character.moveX(-this._game._character._speed);
     }
 
-    moveCharacterUp() {
-        this._game._character.moveY(-1);
-    }
-
-    moveCharacterDown() {
-        this._game._character.moveY(1);
+    jump() {
+        // jump 3 blocs
+        this._game._character.moveY(-BLOCK_HEIGHT * 3);
     }
 }

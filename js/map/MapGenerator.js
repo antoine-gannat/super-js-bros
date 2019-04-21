@@ -33,11 +33,17 @@ class MapGenerator {
             throw new Error("Map size must be at least 10");
         this._map_size = map_size;
         this._map = [];
+        // Size of the starting platform
+        this._starting_platform_size = 5;
+
+        this._block_generation_fct = [
+            { type: map_block_types.grass, fct: this.generateGrass.bind(this) }
+        ]
     }
 
     generateStartingPlatform() {
         // Generate 5 blocs of grass
-        for (var i = 0; i < 5; i++)
+        for (var i = 0; i < this._starting_platform_size; i++)
             this._map.push(new MapBlock(map_block_types.grass, new Position(i, MAP_HEIGHT - 1)));
     }
 
@@ -57,15 +63,37 @@ class MapGenerator {
         return (map_block_types.grass);
     }
 
+    generateGrass(new_block) {
+        this.generateDefaultBlock(new_block);
+        // Add blocs of dirt below the grass until the last row
+        for (var y = new_block.position.y + 1; y <= MAP_HEIGHT - 1; y++) {
+            // Add the block
+            this._map.push(new MapBlock(map_block_types.dirt, new Position(new_block.position.x, y)));
+        }
+    }
+    generateDefaultBlock(new_block) {
+        // Add the block
+        this._map.push(new_block);
+    }
+
     generate() {
         // Generate a flat platform at the begining of each map
         this.generateStartingPlatform();
 
-        while (this._map.length < this._map_size) {
+        for (var col_nb = this._starting_platform_size; col_nb < this._map_size; col_nb++) {
+            // Get the previous block
             var previous_block = this._map[this._map.length - 1];
+            // Get the type of the new block
             var block_type = this.getNextBlockType(previous_block);
-            var next_block_height = this.getNextBlockHeight(previous_block);
-            this._map.push(new MapBlock(block_type, new Position(this._map.length, next_block_height)));
+            // Get the height of the new block
+            var new_block_pos = new Position(col_nb, this.getNextBlockHeight(previous_block));
+            var new_block = new MapBlock(block_type, new_block_pos);
+            var generation_fct = this._block_generation_fct.find((block) => { return (block.type === block_type) });
+            if (generation_fct) {
+                generation_fct.fct(new_block);
+            }
+            else
+                this.generateDefaultBlock(new_block);
         }
         return (this._map);
     }
