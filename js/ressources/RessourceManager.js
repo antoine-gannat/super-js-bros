@@ -9,6 +9,7 @@ class RessourceManager {
         const images_folder_path = "ressources/images/";
 
         this.loadImage(images_folder_path + "grass.jpg", "grass");
+        this.loadImage(images_folder_path + "dirt.jpg", "dirt");
         this.loadImage(images_folder_path + "pablo.png", "pablo");
     }
 

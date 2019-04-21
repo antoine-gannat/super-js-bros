@@ -14,11 +14,17 @@ class Game {
 
         // The character
         this._character = new Character(this);
+
+        // The map
+        this._map = new Map(this);
     }
 
     renderFrame() {
+        // clear the canvas
         this._ctx.clearRect(0, 0, this._canvas.width, this._canvas.height);
-        this._resManager.displayImage("grass", new Position(20, this._canvas.height - 50), new Size(50, 50));
+        // Display the map
+        this._map.render();
+        // Display the character
         this._character.render();
     }
 }
