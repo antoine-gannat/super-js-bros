@@ -49,6 +49,8 @@ class Entity {
     moveX(xMovement) {
         if (this._position.x + xMovement < 0)
             return;
+        if (!this._game._phisics.allowEntityMovement(this, new Position(this._position.x + xMovement, this._position.y - 4)))
+            return;
         if (xMovement < 0)
             this._direction = "left";
         else
@@ -63,9 +65,10 @@ class Entity {
     }
 
     jump() {
-        if (this._jumping || this._game._phisics.isEntityFalling(this))
+        if (this._jumping || this._game._phisics.isEntityFalling(this)) {
             return;
-        this._jumping = new Jump(this, BLOCK_HEIGHT * 5, this._speed.y);
+        }
+        this._jumping = new Jump(this, BLOCK_HEIGHT * 3, this._speed.y);
     }
 
     render() {
