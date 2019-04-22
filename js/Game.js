@@ -12,8 +12,12 @@ class Game {
         this._resManager = new RessourceManager(this);
         this._eventManager = new EventManager(this);
 
-        // The character
+        // Entities
+        this._entities = [];
+
+        // Create the character
         this._character = new Character(this);
+        this._entities.push(this._character);
 
         // The map
         this._map = new Map(this);
@@ -26,10 +30,18 @@ class Game {
         // clear the canvas
         this._ctx.clearRect(0, 0, this._canvas.width, this._canvas.height);
 
-        this._phisics.applyGravityToCharacter(this._character);
+        // Execute events 
+        this._eventManager.executeEvents();
+
+
         // Display the map
         this._map.render();
-        // Display the character
-        this._character.render();
+
+        // Render the entities
+        this._entities.forEach((entity) => {
+            // Apply gravity to the character
+            this._phisics.applyGravityToEntity(entity);
+            entity.render();
+        });
     }
 }

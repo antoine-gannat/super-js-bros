@@ -79,19 +79,27 @@ class MapGenerator {
     generate() {
         // Generate a flat platform at the begining of each map
         this.generateStartingPlatform();
+        var previous_block = this._map[this._map.length - 1];
 
         for (var col_nb = this._starting_platform_size; col_nb < this._map_size; col_nb++) {
-            // Get the previous block
-            var previous_block = this._map[this._map.length - 1];
             // Get the type of the new block
             var block_type = this.getNextBlockType(previous_block);
             // Get the height of the new block
             var new_block_pos = new Position(col_nb, this.getNextBlockHeight(previous_block));
+            // Create the block
             var new_block = new MapBlock(block_type, new_block_pos);
+
+            // Save this block for the next loop
+            var previous_block = new_block;
+
+            // Search if a special function needs to be called to generate this type of block
             var generation_fct = this._block_generation_fct.find((block) => { return (block.type === block_type) });
+
+            // If so, call the function
             if (generation_fct) {
                 generation_fct.fct(new_block);
             }
+            // Otherwise, use the default generation
             else
                 this.generateDefaultBlock(new_block);
         }
