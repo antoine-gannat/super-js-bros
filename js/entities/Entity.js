@@ -21,11 +21,12 @@ class Jump {
 
 class Entity {
     constructor(game, position, size, speed, asset_name) {
+        // Assign a unique id
         this._id = Symbol();
         this._game = game;
         this._position = position;
         this._size = size;
-        this._direction = "right";
+        this._direction = DIRECTIONS.right;
         this._speed = speed;
         this._asset_name = asset_name;
 
@@ -41,12 +42,12 @@ class Entity {
     moveX(xMovement) {
         if (this._position.x + xMovement < 0)
             return;
-        if (!this._game._phisics.allowEntityMovement(this, new Position(this._position.x + xMovement, this._position.y - 4)))
+        if (!this._game._physics.allowEntityMovement(this, new Position(this._position.x + xMovement, this._position.y - 4)))
             return;
         if (xMovement < 0)
-            this._direction = "left";
+            this._direction = DIRECTIONS.left;
         else
-            this._direction = "right";
+            this._direction = DIRECTIONS.right;
         this._position.x += xMovement;
     }
 
@@ -61,11 +62,11 @@ class Entity {
 
     jump() {
         // If the player is currently jumping or falling, leave
-        if (this._jumping || this._game._phisics.isEntityFalling(this)) {
+        if (this._jumping || this._game._physics.isEntityFalling(this)) {
             return;
         }
         // Jump
-        this._jumping = new Jump(this, BLOCK_HEIGHT * 3, this._speed.y);
+        this._jumping = new Jump(this, BLOCK_HEIGHT * 3, this._speed.vertical);
     }
 
     updateJump() {
@@ -77,6 +78,9 @@ class Entity {
     render() {
         this.updateJump();
         // Display the entity
-        this._game._resManager.displayImage(this._asset_name, this._position, this._size);
+        // If a custom position exist
+        var flip = new Flip((this._direction === DIRECTIONS.left));
+        var display_position = new Position(this._position.x - this._game._map._display_position_offset * BLOCK_WIDTH, this._position.y);
+        this._game._resManager.render(this._asset_name, display_position, this._size, flip);
     }
 }

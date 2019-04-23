@@ -1,9 +1,3 @@
-// type of blocks
-const map_block_types = {
-    grass: "grass",
-    dirt: "dirt"
-};
-
 class MapBlock {
     constructor(type, position) {
         this._type = type;
@@ -21,14 +15,14 @@ class MapGenerator {
         this._starting_platform_size = 5;
 
         this._block_generation_fct = [
-            { type: map_block_types.grass, fct: this.generateGrass.bind(this) }
+            { type: MAP_BLOC_TYPES.grass, fct: this.generateGrass.bind(this) }
         ];
     }
 
     generateStartingPlatform() {
         // Generate 5 blocs of grass
         for (var i = 0; i < this._starting_platform_size; i++)
-            this._map.push(new MapBlock(map_block_types.grass, new Position(i, MAP_HEIGHT - 1)));
+            this._map.push(new MapBlock(MAP_BLOC_TYPES.grass, new Position(i, MAP_HEIGHT - 1)));
     }
 
     getNextBlockHeight(previous_block) {
@@ -44,7 +38,7 @@ class MapGenerator {
     }
 
     getNextBlockType(previous_block) {
-        return (map_block_types.grass);
+        return (MAP_BLOC_TYPES.grass);
     }
 
     generateGrass(new_block) {
@@ -52,7 +46,7 @@ class MapGenerator {
         // Add blocs of dirt below the grass until the last row
         for (var y = new_block._position.y + 1; y <= MAP_HEIGHT - 1; y++) {
             // Add the block
-            this._map.push(new MapBlock(map_block_types.dirt, new Position(new_block._position.x, y)));
+            this._map.push(new MapBlock(MAP_BLOC_TYPES.dirt, new Position(new_block._position.x, y)));
         }
     }
     generateDefaultBlock(new_block) {

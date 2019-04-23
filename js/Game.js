@@ -18,12 +18,13 @@ class Game {
         // Create the player
         this._player = new Player(this);
         this._entities.push(this._player);
+        this._entities.push(new Koopa(this));
 
         // The map
         this._map = new Map(this);
 
         // The physics
-        this._phisics = new Physics(this);
+        this._physics = new Physics(this);
     }
 
     // Remove an entity from the entities array
@@ -50,7 +51,7 @@ class Game {
         // Render the entities
         this._entities.forEach((entity) => {
             // Apply gravity to the player
-            this._phisics.applyGravityToEntity(entity);
+            this._physics.applyGravityToEntity(entity);
             entity.render();
         });
     }

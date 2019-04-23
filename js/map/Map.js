@@ -1,9 +1,12 @@
 class Map {
     constructor(game) {
         this._game = game;
-        this._map = new MapGenerator(MAP_WIDTH).generate();
+        this._map = new MapGenerator(MAP_WIDTH * 3).generate();
+        // Offset used to display only the part of the map the player is on
+        // When the player move to the right of the map, this variable increase
         this._display_position_offset = 0;
 
+        // Minimum render distance from the left and right of the map
         this._right_render_distance = 15;
         this._left_render_distance = 5;
     }
@@ -39,7 +42,7 @@ class Map {
 
     // Render a block
     renderBlock(block) {
-        this._game._resManager.displayImage(block._type,
+        this._game._resManager.render(block._type,
             new Position((block._position.x - this._display_position_offset) * BLOCK_WIDTH, block._position.y * BLOCK_HEIGHT),
             new Size(BLOCK_WIDTH, BLOCK_HEIGHT));
     }

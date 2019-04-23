@@ -45,12 +45,12 @@ class EventManager {
 
     movePlayerRight() {
         if (this._game._player)
-            this._game._player.moveX(this._game._player._speed.x);
+            this._game._player.moveX(this._game._player._speed.horizontal);
     }
 
     movePlayerLeft() {
         if (this._game._player)
-            this._game._player.moveX(-this._game._player._speed.x);
+            this._game._player.moveX(-this._game._player._speed.horizontal);
     }
 
     jump() {
