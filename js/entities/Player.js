@@ -2,7 +2,9 @@ class Player extends Entity {
     constructor(game) {
         super(game, new Position(0, (MAP_HEIGHT - 5) * BLOCK_HEIGHT),
             new Size(40, 85),
-            new Speed(BLOCK_WIDTH / 20, BLOCK_WIDTH / 10), "pablo");
+            new Speed(BLOCK_WIDTH / 30, BLOCK_WIDTH / 10),
+            "pablo",
+            DIRECTIONS.right);
         this._game = game;
     }
 

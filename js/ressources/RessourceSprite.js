@@ -24,6 +24,13 @@ class RessourceSprite extends Ressource {
         if (this._frame_index >= this._frame_number)
             this._frame_index = 0;
 
+        var scaleH = flip.horizontal ? -1 : 1, // Set horizontal scale to -1 if flip horizontal
+            scaleV = flip.vertical ? -1 : 1, // Set verical scale to -1 if flip vertical
+            posX = flip.horizontal ? size.width * -1 : 0, // Set x position to -100% if flip horizontal 
+            posY = flip.vertical ? size.height * -1 : 0; // Set y position to -100% if flip vertical
+
+        ctx.save(); // Save the current state
+        ctx.scale(scaleH, scaleV); // Set scale to flip the image
         // Display the frame of the sprite
         ctx.drawImage(
             this._image,
@@ -31,9 +38,11 @@ class RessourceSprite extends Ressource {
             0,
             this._frame_width,
             this._frame_height,
-            position.x,
-            position.y,
+            posX + (flip.horizontal ? -position.x : position.x),
+            position.y + posY,
             size.width,
             size.height);
+        ctx.restore(); // Restore the last saved state
+
     }
 }

@@ -20,7 +20,7 @@ class Jump {
 }
 
 class Entity {
-    constructor(game, position, size, speed, asset_name) {
+    constructor(game, position, size, speed, asset_name, asset_orientation) {
         // Assign a unique id
         this._id = Symbol();
         this._game = game;
@@ -29,6 +29,7 @@ class Entity {
         this._direction = DIRECTIONS.right;
         this._speed = speed;
         this._asset_name = asset_name;
+        this._asset_orientation = asset_orientation;
 
         // not null if jumping
         this._jumping = null;
@@ -79,7 +80,7 @@ class Entity {
         this.updateJump();
         // Display the entity
         // If a custom position exist
-        var flip = new Flip((this._direction === DIRECTIONS.left));
+        var flip = new Flip((this._direction !== this._asset_orientation));
         var display_position = new Position(this._position.x - this._game._map._display_position_offset * BLOCK_WIDTH, this._position.y);
         this._game._resManager.render(this._asset_name, display_position, this._size, flip);
     }

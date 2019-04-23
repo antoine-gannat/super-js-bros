@@ -12,10 +12,10 @@ class RessourceManager {
         // Load images
         this._ressources.push(new RessourceImage("grass", images_folder_path + "grass.jpg"));
         this._ressources.push(new RessourceImage("dirt", images_folder_path + "dirt.jpg"));
-        this._ressources.push(new RessourceImage("pablo", images_folder_path + "pablo.png"));
 
         // Load sprites
         this._ressources.push(new RessourceSprite("koopa", images_folder_path + "sprite_koopa.png", 27, 32, 8, 20));
+        this._ressources.push(new RessourceSprite("pablo", images_folder_path + "pablo.png", 62, 95, 4, 20));
 
         // Render functions
         this._render_fct = [
