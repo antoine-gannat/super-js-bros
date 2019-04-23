@@ -42,7 +42,8 @@ class Map {
 
     // Render a block
     renderBlock(block) {
-        this._game._resManager.render(block._type,
+        var resManager = this._game._resManager;
+        resManager.render(resManager.getRessourceByName(block._type),
             new Position((block._position.x - this._display_position_offset) * BLOCK_WIDTH, block._position.y * BLOCK_HEIGHT),
             new Size(BLOCK_WIDTH, BLOCK_HEIGHT));
     }

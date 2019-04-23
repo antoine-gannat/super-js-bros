@@ -13,15 +13,19 @@ class RessourceManager {
         this._ressources.push(new RessourceImage("grass", images_folder_path + "grass.jpg"));
         this._ressources.push(new RessourceImage("dirt", images_folder_path + "dirt.jpg"));
 
-        // Load sprites
-        this._ressources.push(new RessourceSprite("koopa", images_folder_path + "sprite_koopa.png", 27, 32, 8, 20));
+        // Pre Load sprites
+        this._ressources.push(new RessourceSprite("koopa", images_folder_path + "sprite_koopa.png", 27, 32, 9, 20));
         this._ressources.push(new RessourceSprite("pablo", images_folder_path + "pablo.png", 62, 95, 4, 20));
 
         // Render functions
         this._render_fct = [
             { type: RESSOURCE_TYPES.image, fct: this.renderImage.bind(this) },
             { type: RESSOURCE_TYPES.sprite, fct: this.renderSprite.bind(this) },
-        ]
+        ];
+    }
+
+    getRessourceByName(name) {
+        return (this._ressources.find((res) => { return (res.name === name) }));
     }
 
     // Display an image
@@ -33,12 +37,7 @@ class RessourceManager {
         sprite.renderAt(this._ctx, position, size, flip);
     }
 
-    render(name, position, size, flip) {
-        // Search for the ressource named 'name'
-        var ressource = this._ressources.find((res) => { return (res.name == name) });
-        if (!ressource)
-            throw new Error("Ressource " + name + " not found");
-
+    render(ressource, position, size, flip) {
         // Search for the ressource's render function
         var render_function = this._render_fct.find((render) => { return (render.type === ressource.type) });
         if (!render_function)

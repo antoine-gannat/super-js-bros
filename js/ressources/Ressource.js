@@ -19,4 +19,9 @@ class Ressource {
     set name(newName) {
         this._name = newName;
     }
+
+    // Clone the ressource
+    clone() {
+        return (new Ressource(this._name, this._type));
+    }
 }

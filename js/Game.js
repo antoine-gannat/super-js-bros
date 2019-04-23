@@ -19,6 +19,8 @@ class Game {
         this._player = new Player(this);
         this._entities.push(this._player);
         this._entities.push(new Koopa(this));
+        this._entities.push(new Koopa(this));
+        this._entities.push(new Koopa(this));
 
         // The map
         this._map = new Map(this);

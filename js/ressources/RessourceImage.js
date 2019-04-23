@@ -6,20 +6,23 @@ class RessourceImage extends Ressource {
         this._image.src = path;
     }
 
-    renderAt(ctx, position, size, flip = new Flip()) {
-        var scaleH = flip.horizontal ? -1 : 1, // Set horizontal scale to -1 if flip horizontal
-            scaleV = flip.vertical ? -1 : 1, // Set verical scale to -1 if flip vertical
-            posX = flip.horizontal ? size.width * -1 : 0, // Set x position to -100% if flip horizontal 
-            posY = flip.vertical ? size.height * -1 : 0; // Set y position to -100% if flip vertical
+    clone() {
+        return (new RessourceSprite(this._name, this._image.src));
+    }
 
-        ctx.save(); // Save the current state
-        ctx.scale(scaleH, scaleV); // Set scale to flip the image
+    renderAt(ctx, position, size, flip = new Flip()) {
+        // Save the current state
+        ctx.save();
+        // Set scale to flip the image
+        ctx.scale(flip.horizontal ? -1 : 1, flip.vertical ? -1 : 1);
+        // Draw the image
         ctx.drawImage(this._image,
-            posX + (flip.horizontal ? -position.x : position.x),
-            position.y + posY,
+            (flip.horizontal ? (size.width * -1) - position.x : position.x),
+            (flip.vertical ? (size.height * -1) - position.y : position.y),
             size.width,
-            size.height); // draw the image
-        ctx.restore(); // Restore the last saved state
+            size.height);
+        // Restore the last saved state
+        ctx.restore();
 
     }
 }
