@@ -15,8 +15,12 @@ const RESSOURCE_TYPES = {
     sprite: "sprite"
 };
 
-
 const DIRECTIONS = {
     left: "left",
     right: "right"
-}
+};
+
+const TEAMS = {
+    friend: "friend",
+    enemy: "enemy"
+};

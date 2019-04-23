@@ -40,11 +40,12 @@ class Game {
         this._entities.splice(entity_index, 1);
     }
 
+
     renderFrame() {
         // clear the canvas
         this._ctx.clearRect(0, 0, this._canvas.width, this._canvas.height);
 
-        // Execute events 
+        // Execute events
         this._eventManager.executeEvents();
 
         // Display the map
@@ -54,6 +55,13 @@ class Game {
         this._entities.forEach((entity) => {
             // Apply gravity to the player
             this._physics.applyGravityToEntity(entity);
+            // Check collision with other entities
+            this._physics.checkEntitiesHit(entity).forEach((e) => {
+                // If the entites are not in the same team
+                if (entity._team !== e._team) {
+                    this._player.die();
+                }
+            });
             entity.render();
         });
     }

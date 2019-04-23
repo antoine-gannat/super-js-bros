@@ -6,6 +6,7 @@ class Player extends Entity {
             game._resManager.getRessourceByName("pablo").clone(),
             DIRECTIONS.right);
         this._game = game;
+        this._team = TEAMS.friend;
     }
 
     die() {

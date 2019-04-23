@@ -32,10 +32,12 @@ class Entity {
         this._asset.attachEntity(this);
         this._asset_orientation = asset_orientation;
 
+        // 
+        this._team = undefined;
         // not null if jumping
         this._jumping = null;
 
-        // 
+        // True if the player has move since the last sprite render
         this._has_moved = false;
     }
 

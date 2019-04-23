@@ -21,16 +21,35 @@ class Physics {
         return (false);
     }
 
+    // Check if an entity hit another entity
+    checkEntitiesHit(entity) {
+        var entities_hit = [];
+        this._game._entities.forEach((e) => {
+            // Don't count itself
+            if (entity._id === e._id)
+                return;
+            // Check if the entities are touching
+            if (entity._position.x >= e._position.x && entity._position.x <= e._position.x + e._size.width
+                && entity._position.y <= e._position.y && entity._position.y + entity._size.height >= e._position.y) {
+                entities_hit.push(e);
+            }
+        });
+        return (entities_hit);
+    }
+
     applyGravityToEntity(entity) {
+        // If the entity is jumping or is already touching the ground, leave
         if (this.checkBlockHit(entity._position, entity._size) || entity._jumping)
             return;
         entity.moveY(this._gravity_force);
     }
 
+    // Return true if the entity is falling
     isEntityFalling(entity) {
         return (!this.checkBlockHit(entity._position, entity._size));
     }
 
+    // Return true if the movement is allowed
     allowEntityMovement(entity, new_position) {
         return (!this.checkBlockHit(new_position, entity._size));
     }
