@@ -26,13 +26,23 @@ class Game {
         this._phisics = new Physics(this);
     }
 
+    // Remove an entity from the entities array
+    killEntity(entity_id) {
+        // Find the entity to kill
+        var entity_index = this._entities.findIndex((e) => { return (e._id === entity_id) });
+        // If the entity was not found, leave
+        if (entity_index < 0)
+            return;
+        // Remove the entity from the entities array
+        this._entities.splice(entity_index, 1);
+    }
+
     renderFrame() {
         // clear the canvas
         this._ctx.clearRect(0, 0, this._canvas.width, this._canvas.height);
 
         // Execute events 
         this._eventManager.executeEvents();
-
 
         // Display the map
         this._map.render();

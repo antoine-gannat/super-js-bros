@@ -44,16 +44,19 @@ class EventManager {
     // Event callbacks
 
     moveCharacterRight() {
-        this._game._character.moveX(this._game._character._speed.x);
+        if (this._game._character)
+            this._game._character.moveX(this._game._character._speed.x);
     }
 
     moveCharacterLeft() {
-        this._game._character.moveX(-this._game._character._speed.x);
+        if (this._game._character)
+            this._game._character.moveX(-this._game._character._speed.x);
     }
 
     jump() {
         // jump 3 blocs
-        this._game._character.jump();
+        if (this._game._character)
+            this._game._character.jump();
     }
 
     executeEvents() {

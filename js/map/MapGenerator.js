@@ -38,7 +38,7 @@ class MapGenerator {
 
         this._block_generation_fct = [
             { type: map_block_types.grass, fct: this.generateGrass.bind(this) }
-        ]
+        ];
     }
 
     generateStartingPlatform() {

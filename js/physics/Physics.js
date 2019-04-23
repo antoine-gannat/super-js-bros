@@ -1,6 +1,7 @@
 class Physics {
     constructor(game) {
         this._game = game;
+        this._gravity_force = Math.round(BLOCK_HEIGHT / 15);
     }
 
     // Check if the entity has hit a block
@@ -23,7 +24,7 @@ class Physics {
     applyGravityToEntity(entity) {
         if (this.checkBlockHit(entity.position, entity.size) || entity._jumping)
             return;
-        entity.position.y += Math.round(BLOCK_HEIGHT / 15);
+        entity.moveY(this._gravity_force);
     }
 
     isEntityFalling(entity) {

@@ -21,6 +21,7 @@ class Jump {
 
 class Entity {
     constructor(game, position, size, speed) {
+        this._id = Symbol();
         this._game = game;
         this._position = position;
         this._size = size;
@@ -46,6 +47,12 @@ class Entity {
         this._size = newSize;
     }
 
+
+    // Remove the entity from the entities list
+    die() {
+        this._game.killEntity(this._id);
+    }
+
     moveX(xMovement) {
         if (this._position.x + xMovement < 0)
             return;
@@ -62,16 +69,22 @@ class Entity {
         if (this._position.y + yMovement < 0)
             return;
         this._position.y += yMovement;
+        // If the player fell out of the world
+        if (this._position.y > MAP_HEIGHT * BLOCK_HEIGHT)
+            this.die();
     }
 
     jump() {
+        // If the player is currently jumping or falling, leave
         if (this._jumping || this._game._phisics.isEntityFalling(this)) {
             return;
         }
+        // Jump
         this._jumping = new Jump(this, BLOCK_HEIGHT * 3, this._speed.y);
     }
 
     render() {
+        // If the player is done jumping, we set the _jumping variable value to null
         if (this._jumping && !this._jumping.execute())
             this._jumping = null;
     }
