@@ -10,8 +10,8 @@ class EventManager {
         window.onkeydown = this.onKeyDown.bind(this);
         window.onkeyup = this.onKeyUp.bind(this);
         this._key_map = [
-            { key: "ArrowRight", callback: this.moveCharacterRight.bind(this) },
-            { key: "ArrowLeft", callback: this.moveCharacterLeft.bind(this) },
+            { key: "ArrowRight", callback: this.movePlayerRight.bind(this) },
+            { key: "ArrowLeft", callback: this.movePlayerLeft.bind(this) },
             { key: " ", callback: this.jump.bind(this) },
         ];
     }
@@ -43,20 +43,20 @@ class EventManager {
 
     // Event callbacks
 
-    moveCharacterRight() {
-        if (this._game._character)
-            this._game._character.moveX(this._game._character._speed.x);
+    movePlayerRight() {
+        if (this._game._player)
+            this._game._player.moveX(this._game._player._speed.x);
     }
 
-    moveCharacterLeft() {
-        if (this._game._character)
-            this._game._character.moveX(-this._game._character._speed.x);
+    movePlayerLeft() {
+        if (this._game._player)
+            this._game._player.moveX(-this._game._player._speed.x);
     }
 
     jump() {
         // jump 3 blocs
-        if (this._game._character)
-            this._game._character.jump();
+        if (this._game._player)
+            this._game._player.jump();
     }
 
     executeEvents() {

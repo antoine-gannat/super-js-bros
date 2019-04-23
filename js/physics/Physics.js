@@ -22,16 +22,16 @@ class Physics {
     }
 
     applyGravityToEntity(entity) {
-        if (this.checkBlockHit(entity.position, entity.size) || entity._jumping)
+        if (this.checkBlockHit(entity._position, entity._size) || entity._jumping)
             return;
         entity.moveY(this._gravity_force);
     }
 
     isEntityFalling(entity) {
-        return (!this.checkBlockHit(entity.position, entity.size));
+        return (!this.checkBlockHit(entity._position, entity._size));
     }
 
     allowEntityMovement(entity, new_position) {
-        return (!this.checkBlockHit(new_position, entity.size));
+        return (!this.checkBlockHit(new_position, entity._size));
     }
 };

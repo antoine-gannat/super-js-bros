@@ -15,9 +15,9 @@ class Game {
         // Entities
         this._entities = [];
 
-        // Create the character
-        this._character = new Character(this);
-        this._entities.push(this._character);
+        // Create the player
+        this._player = new Player(this);
+        this._entities.push(this._player);
 
         // The map
         this._map = new Map(this);
@@ -49,7 +49,7 @@ class Game {
 
         // Render the entities
         this._entities.forEach((entity) => {
-            // Apply gravity to the character
+            // Apply gravity to the player
             this._phisics.applyGravityToEntity(entity);
             entity.render();
         });

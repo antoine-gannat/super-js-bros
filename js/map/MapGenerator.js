@@ -9,22 +9,6 @@ class MapBlock {
         this._type = type;
         this._position = position;
     }
-
-    get type() {
-        return (this._type);
-    }
-
-    get position() {
-        return (this._position);
-    }
-
-    set type(newType) {
-        this._type = newType;
-    }
-
-    set position(newPosition) {
-        this._position = newPosition;
-    }
 }
 
 class MapGenerator {
@@ -50,13 +34,13 @@ class MapGenerator {
     getNextBlockHeight(previous_block) {
         // 50% of chance to stay at the same height
         if (Math.round(Math.random()))
-            return (previous_block.position.y);
+            return (previous_block._position.y);
         // If last block was on the last line, we go up
-        if (previous_block.position.y === MAP_HEIGHT - 1
+        if (previous_block._position.y === MAP_HEIGHT - 1
             || Math.round(Math.random())) {
-            return (previous_block.position.y - 1);
+            return (previous_block._position.y - 1);
         }
-        return (previous_block.position.y + 1);
+        return (previous_block._position.y + 1);
     }
 
     getNextBlockType(previous_block) {
@@ -66,9 +50,9 @@ class MapGenerator {
     generateGrass(new_block) {
         this.generateDefaultBlock(new_block);
         // Add blocs of dirt below the grass until the last row
-        for (var y = new_block.position.y + 1; y <= MAP_HEIGHT - 1; y++) {
+        for (var y = new_block._position.y + 1; y <= MAP_HEIGHT - 1; y++) {
             // Add the block
-            this._map.push(new MapBlock(map_block_types.dirt, new Position(new_block.position.x, y)));
+            this._map.push(new MapBlock(map_block_types.dirt, new Position(new_block._position.x, y)));
         }
     }
     generateDefaultBlock(new_block) {
@@ -79,6 +63,7 @@ class MapGenerator {
     generate() {
         // Generate a flat platform at the begining of each map
         this.generateStartingPlatform();
+        // Get the previous block
         var previous_block = this._map[this._map.length - 1];
 
         for (var col_nb = this._starting_platform_size; col_nb < this._map_size; col_nb++) {

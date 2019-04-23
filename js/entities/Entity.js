@@ -14,39 +14,24 @@ class Jump {
 
         this._height_remaining -= this._speed;
         // Change the y position of the entity
-        this._entity.position.y -= this._speed;
+        this._entity.moveY(-this._speed);
         return (true);
     }
 }
 
 class Entity {
-    constructor(game, position, size, speed) {
+    constructor(game, position, size, speed, asset_name) {
         this._id = Symbol();
         this._game = game;
         this._position = position;
         this._size = size;
         this._direction = "right";
         this._speed = speed;
+        this._asset_name = asset_name;
 
         // not null if jumping
         this._jumping = null;
     }
-
-    set position(newPosition) {
-        this._position = newPosition;
-    }
-
-    get position() {
-        return (this._position);
-    }
-    get size() {
-        return (this._size);
-    }
-
-    set size(newSize) {
-        this._size = newSize;
-    }
-
 
     // Remove the entity from the entities list
     die() {
@@ -83,9 +68,15 @@ class Entity {
         this._jumping = new Jump(this, BLOCK_HEIGHT * 3, this._speed.y);
     }
 
-    render() {
+    updateJump() {
         // If the player is done jumping, we set the _jumping variable value to null
         if (this._jumping && !this._jumping.execute())
             this._jumping = null;
+    }
+
+    render() {
+        this.updateJump();
+        // Display the entity
+        this._game._resManager.displayImage(this._asset_name, this._position, this._size);
     }
 }
