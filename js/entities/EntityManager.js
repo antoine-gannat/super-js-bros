@@ -40,7 +40,17 @@ class EntityManager {
             this._game._physics.checkEntitiesHit(entity).forEach((e) => {
                 // If the entites are not in the same team
                 if (entity._team !== e._team) {
-                    this._game._player.die();
+                    var ally = (entity._team === TEAMS.friend ? entity : e);
+                    var enemy = (entity._team === TEAMS.friend ? e : entity);
+                    var ally_feet_pos = ally._position.y + ally._size._height;
+                    var enemy_head_pos = enemy._position.y;
+
+                    if (enemy_head_pos - 3 <= ally_feet_pos && ally_feet_pos <= enemy_head_pos + 3) {
+                        ally.forceJump();
+                        enemy.die();
+                    }
+                    else
+                        ally.die();
                 }
             });
             entity.render();

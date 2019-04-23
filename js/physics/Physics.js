@@ -29,7 +29,8 @@ class Physics {
             if (entity._id === e._id)
                 return;
             // Check if the entities are touching
-            if (entity._position.x >= e._position.x && entity._position.x <= e._position.x + e._size.width
+            if (((entity._position.x >= e._position.x && entity._position.x <= e._position.x + e._size.width)
+                || (entity._position.x + entity._size.width >= e._position.x && entity._position.x + entity._size.width <= e._position.x + e._size.width))
                 && entity._position.y <= e._position.y && entity._position.y + entity._size.height >= e._position.y) {
                 entities_hit.push(e);
             }
