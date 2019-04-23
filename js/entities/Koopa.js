@@ -1,6 +1,6 @@
 class Koopa extends Entity {
-    constructor(game) {
-        super(game, new Position(BLOCK_WIDTH * 10, 0),
+    constructor(game, position) {
+        super(game, position,
             new Size(40, 85),
             new Speed(BLOCK_WIDTH / 50, BLOCK_WIDTH / 10),
             game._resManager.getRessourceByName("koopa").clone(),

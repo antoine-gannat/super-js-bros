@@ -43,7 +43,7 @@ class Entity {
 
     // Remove the entity from the entities list
     die() {
-        this._game.killEntity(this._id);
+        this._game._entityManager.deleteEntity(this._id);
     }
 
     moveX(xMovement) {
@@ -74,7 +74,7 @@ class Entity {
             return;
         }
         // Jump
-        this._jumping = new Jump(this, BLOCK_HEIGHT * 3, this._speed.vertical);
+        this._jumping = new Jump(this, BLOCK_HEIGHT * 4, this._speed.vertical);
     }
 
     updateJump() {

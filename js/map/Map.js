@@ -1,7 +1,8 @@
 class Map {
     constructor(game) {
         this._game = game;
-        this._map = new MapGenerator(MAP_WIDTH * 3).generate();
+        this._map_width = MAP_WIDTH * 3;
+        this._map = new MapGenerator(this._map_width).generate();
         // Offset used to display only the part of the map the player is on
         // When the player move to the right of the map, this variable increase
         this._display_position_offset = 0;
@@ -9,6 +10,11 @@ class Map {
         // Minimum render distance from the left and right of the map
         this._right_render_distance = 15;
         this._left_render_distance = 5;
+    }
+
+    getMapHeightAt(column) {
+        var all_block_in_column = this._map.filter((block) => { return (block._position.x === column) });
+        return (all_block_in_column.length);
     }
 
     // Get the block at the position 'position'

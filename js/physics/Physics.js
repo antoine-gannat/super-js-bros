@@ -24,7 +24,7 @@ class Physics {
     // Check if an entity hit another entity
     checkEntitiesHit(entity) {
         var entities_hit = [];
-        this._game._entities.forEach((e) => {
+        this._game._entityManager._entities.forEach((e) => {
             // Don't count itself
             if (entity._id === e._id)
                 return;

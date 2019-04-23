@@ -11,8 +11,6 @@ class MapGenerator {
             throw new Error("Map size must be at least 10");
         this._map_size = map_size;
         this._map = [];
-        // Size of the starting platform
-        this._starting_platform_size = 5;
 
         this._block_generation_fct = [
             { type: MAP_BLOC_TYPES.grass, fct: this.generateGrass.bind(this) }
@@ -21,7 +19,7 @@ class MapGenerator {
 
     generateStartingPlatform() {
         // Generate 5 blocs of grass
-        for (var i = 0; i < this._starting_platform_size; i++)
+        for (var i = 0; i < STARTING_PLATFORM_SIZE; i++)
             this._map.push(new MapBlock(MAP_BLOC_TYPES.grass, new Position(i, MAP_HEIGHT - 1)));
     }
 
@@ -60,7 +58,7 @@ class MapGenerator {
         // Get the previous block
         var previous_block = this._map[this._map.length - 1];
 
-        for (var col_nb = this._starting_platform_size; col_nb < this._map_size; col_nb++) {
+        for (var col_nb = STARTING_PLATFORM_SIZE; col_nb < this._map_size; col_nb++) {
             // Get the type of the new block
             var block_type = this.getNextBlockType(previous_block);
             // Get the height of the new block
