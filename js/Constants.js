@@ -13,7 +13,8 @@ const MAP_BLOC_TYPES = {
 // type of blocks
 const RESSOURCE_TYPES = {
     image: "image",
-    sprite: "sprite"
+    sprite: "sprite",
+    sound: "sound"
 };
 
 const DIRECTIONS = {

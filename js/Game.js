@@ -26,6 +26,26 @@ class Game {
         // Create the entity manager
         this._entityManager = new EntityManager(this);
         this._entityManager.addNewEntity(this._player);
+
+        // HTML manager used to control html elements over the canvas (gameover, etc ..)
+        this._HTMLManager = new HTMLManager(this);
+    }
+
+    gameover() {
+        // Play the gameover sound
+        this._resManager.playSound("death");
+        // Set the variable player to null
+        this._player = null;
+        // Display the gameover screen
+        this._HTMLManager.displayGameOverScreen();
+        // Reset the map offset
+        this._map._display_position_offset = 0;
+    }
+
+    restart() {
+        this._player = new Player(this);
+        this._entityManager.addNewEntity(this._player);
+        this._HTMLManager.hideGameOverScreen();
     }
 
     renderFrame() {

@@ -1,4 +1,4 @@
-class Koopa extends Entity {
+class Koopa extends Enemy {
     constructor(game, position) {
         super(game, position,
             new Size(40, 85),

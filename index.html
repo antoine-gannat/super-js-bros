@@ -4,10 +4,18 @@
 <head>
     <title>Super Pablo Bros</title>
     <link rel="stylesheet" type="text/css" href="./css/canvas.css">
+    <link rel="stylesheet" type="text/css" href="./css/html-components.css">
+
+    <!-- Include Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 </head>
 
 <body>
     <canvas id="canvas"></canvas>
+    <div id="restart-container" class="container text-center">
+        <h2>Game Over !</h2>
+        <button class="btn btn-primary" onclick="game.restart()">Restart</button>
+    </div>
     <script src="js/Constants.js"></script>
     <script src="js/tools/Speed.js"></script>
     <script src="js/tools/Flip.js"></script>
@@ -15,6 +23,7 @@
     <script src="js/tools/Size.js"></script>
     <script src="js/tools/Convertion.js"></script>
     <script src="js/ressources/Ressource.js"></script>
+    <script src="js/ressources/RessourceSound.js"></script>
     <script src="js/ressources/RessourceImage.js"></script>
     <script src="js/ressources/RessourceSprite.js"></script>
     <script src="js/ressources/RessourceManager.js"></script>
@@ -23,9 +32,11 @@
     <script src="js/map/Map.js"></script>
     <script src="js/physics/Physics.js"></script>
     <script src="js/entities/Entity.js"></script>
+    <script src="js/entities/Enemy.js"></script>
     <script src="js/entities/Player.js"></script>
     <script src="js/entities/Koopa.js"></script>
     <script src="js/entities/EntityManager.js"></script>
+    <script src="js/HTMLManager.js"></script>
     <script src="js/Game.js"></script>
     <script src="js/main.js"></script>
 </body>

@@ -9,10 +9,17 @@ class Player extends Entity {
         this._team = TEAMS.friend;
     }
 
+    jump() {
+        if (!super.jump())
+            return;
+        this._game._resManager.playSound("mario_jump");
+    }
+
     die() {
         // Call the parent function
         super.die();
-        // Set the player variable to null
-        this._game._player = null;
+
+        // Call the game over function
+        this._game.gameover();
     }
 }

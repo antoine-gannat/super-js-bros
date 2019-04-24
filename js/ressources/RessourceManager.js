@@ -8,6 +8,7 @@ class RessourceManager {
         // Load images
         // Set the path to the images folder
         const images_folder_path = "ressources/images/";
+        const sounds_folder_path = "ressources/sounds/";
 
         // Load images
         this._ressources.push(new RessourceImage("grass", images_folder_path + "grass.jpg"));
@@ -16,6 +17,11 @@ class RessourceManager {
         // Pre Load sprites
         this._ressources.push(new RessourceSprite("koopa", images_folder_path + "sprite_koopa.png", 27, 32, 9, 20));
         this._ressources.push(new RessourceSprite("pablo", images_folder_path + "pablo.png", 62, 95, 4, 20));
+
+        // Load sounds
+        this._ressources.push(new RessourceSound("mario_jump", sounds_folder_path + "mario_jump.wav"));
+        this._ressources.push(new RessourceSound("death", sounds_folder_path + "death.wav"));
+        this._ressources.push(new RessourceSound("kill", sounds_folder_path + "kill.wav"));
 
         // Render functions
         this._render_fct = [
@@ -35,6 +41,14 @@ class RessourceManager {
 
     renderSprite(sprite, position, size, flip) {
         sprite.renderAt(this._ctx, position, size, flip);
+    }
+
+    playSound(name) {
+        var sound = this._ressources.find((r) => { return (r.name === name) });
+
+        if (!sound)
+            throw new Error("Sound: " + name + " not found");
+        sound.play();
     }
 
     render(ressource, position, size, flip) {

@@ -76,10 +76,11 @@ class Entity {
     jump() {
         // If the player is currently jumping or falling, leave
         if (this._jumping || this._game._physics.isEntityFalling(this)) {
-            return;
+            return (false);
         }
         // Jump
         this._jumping = new Jump(this, BLOCK_HEIGHT * 4, this._speed.vertical);
+        return (true);
     }
 
     updateJump() {
