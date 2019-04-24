@@ -94,7 +94,7 @@ class Entity {
         // Display the entity
         // If a custom position exist
         var flip = new Flip((this._direction !== this._asset_orientation));
-        var display_position = new Position(this._position.x - this._game._map._display_position_offset * BLOCK_WIDTH, this._position.y);
+        var display_position = new Position(this._position.x - this._game._map._display_position_offset, this._position.y);
         this._game._resManager.render(this._asset, display_position, this._size, flip);
     }
 }

@@ -19,6 +19,8 @@ class EventManager {
     // Events
 
     onKeyDown(e) {
+        if (!this._game._music_started)
+            this._game.startSoundtrack();
         // Search if the key is already is the array
         var key_index = this._keys_pressed.findIndex((key) => { return (key === e.key) });
         // If so, leave

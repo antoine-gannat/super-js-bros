@@ -19,9 +19,10 @@ class RessourceManager {
         this._ressources.push(new RessourceSprite("pablo", images_folder_path + "pablo.png", 62, 95, 4, 20));
 
         // Load sounds
-        this._ressources.push(new RessourceSound("mario_jump", sounds_folder_path + "mario_jump.wav"));
-        this._ressources.push(new RessourceSound("death", sounds_folder_path + "death.wav"));
-        this._ressources.push(new RessourceSound("kill", sounds_folder_path + "kill.wav"));
+        this._ressources.push(new RessourceSound("mario_jump", sounds_folder_path + "mario_jump.ogg"));
+        this._ressources.push(new RessourceSound("death", sounds_folder_path + "death.ogg"));
+        this._ressources.push(new RessourceSound("kill", sounds_folder_path + "kill.ogg"));
+        this._ressources.push(new RessourceSound("soundtrack", sounds_folder_path + "soundtrack.ogg"));
 
         // Render functions
         this._render_fct = [
@@ -43,12 +44,23 @@ class RessourceManager {
         sprite.renderAt(this._ctx, position, size, flip);
     }
 
-    playSound(name) {
-        var sound = this._ressources.find((r) => { return (r.name === name) });
+    playSound(name, loop = false) {
+        var sound = this.getRessourceByName(name);
 
         if (!sound)
             throw new Error("Sound: " + name + " not found");
-        sound.play();
+        if (loop === true)
+            sound.playLoop();
+        else
+            sound.play();
+    }
+
+    stopSound(name) {
+        var sound = this.getRessourceByName(name);
+
+        if (!sound)
+            throw new Error("Sound: " + name + " not found");
+        sound.stop();
     }
 
     render(ressource, position, size, flip) {

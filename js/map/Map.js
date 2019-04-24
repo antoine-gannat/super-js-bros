@@ -8,8 +8,11 @@ class Map {
         this._display_position_offset = 0;
 
         // Minimum render distance from the left and right of the map
-        this._right_render_distance = 15;
-        this._left_render_distance = 5;
+        this._right_render_distance = window.innerWidth / 2;
+        this._left_render_distance = window.innerWidth / 4;
+
+        // Number of blocs display outside of the screen (avoid blanks while loading)
+        this._extra_display_block = 1;
     }
 
     getMapHeightAt(column) {
@@ -24,33 +27,36 @@ class Map {
 
     // Get the left and right distance from the player to the map border
     getPlayerBorderDistance() {
-        var player_block_pos = new Convertion().screenPosToBlockPos(this._game._player._position);
-
         // Get the player position to the left of the map
-        var left_distance = Math.abs(player_block_pos.x - this._display_position_offset);
+        var left_distance = this._game._player._position.x - this._display_position_offset;
         // Get the player position to the right of the map
-        var right_distance = MAP_WIDTH - left_distance;
+        var right_distance = window.innerWidth - this._game._player._position.x + this._display_position_offset;
         return ({ left: left_distance, right: right_distance });
     }
 
     updateRenderDistance() {
         if (!this._game._player)
             return;
+        // Get the player distance from the sides of the screen
         const border_distance = this.getPlayerBorderDistance();
         // Get the position of the player in blocks
-        // If the player is close to the right border, we increase the 'display_position' offset
-        if (border_distance.right < this._right_render_distance)
-            this._display_position_offset++;
-        // Else if the player is close to the left border, we decrease the 'display_position' offset
-        else if (this._display_position_offset > 0 && border_distance.left < this._left_render_distance)
-            this._display_position_offset--;
+        // If the player is close to the left side of the screen, we increase the 'display_position' offset
+        if (border_distance.right < this._right_render_distance) {
+            this._display_position_offset += this._right_render_distance - border_distance.right;
+        }
+        // Else if the player is close to the left side of the screen, we decrease the 'display_position' offset
+        else if (this._display_position_offset > 0 && border_distance.left < this._left_render_distance) {
+            this._display_position_offset -= this._left_render_distance - border_distance.left;
+            // To avoid any problems, if the offset goes below 0, we set it to 0
+            if (this._display_position_offset < 0)
+                this._display_position_offset = 0;
+        }
     }
 
     // Render a block
     renderBlock(block) {
-        var resManager = this._game._resManager;
-        resManager.render(resManager.getRessourceByName(block._type),
-            new Position((block._position.x - this._display_position_offset) * BLOCK_WIDTH, block._position.y * BLOCK_HEIGHT),
+        this._game._resManager.render(this._game._resManager.getRessourceByName(block._type),
+            new Position(block._position.x * BLOCK_WIDTH - this._display_position_offset, block._position.y * BLOCK_HEIGHT),
             new Size(BLOCK_WIDTH, BLOCK_HEIGHT));
     }
 
@@ -58,7 +64,9 @@ class Map {
         // Update the render distance
         this.updateRenderDistance();
         // Display the map
-        for (var i = this._display_position_offset; i < this._map.length && this._map[i]._position.x < MAP_WIDTH + this._display_position_offset; i++) {
+        var first_block_to_display = Math.round((this._display_position_offset / BLOCK_WIDTH));
+        for (var i = first_block_to_display; i < this._map.length
+            && this._map[i]._position.x < MAP_WIDTH + first_block_to_display + this._extra_display_block; i++) {
             this.renderBlock(this._map[i]);
         }
     }

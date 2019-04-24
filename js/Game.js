@@ -29,22 +29,32 @@ class Game {
 
         // HTML manager used to control html elements over the canvas (gameover, etc ..)
         this._HTMLManager = new HTMLManager(this);
+        // True if the music has started
+        this._music_started = false;
+    }
+
+    startSoundtrack() {
+        this._resManager.playSound("soundtrack", true);
+        this._music_started = true;
     }
 
     gameover() {
         // Play the gameover sound
+        this._resManager.stopSound("soundtrack");
         this._resManager.playSound("death");
         // Set the variable player to null
         this._player = null;
         // Display the gameover screen
         this._HTMLManager.displayGameOverScreen();
-        // Reset the map offset
-        this._map._display_position_offset = 0;
+        this._music_started = false;
     }
 
     restart() {
         this._player = new Player(this);
         this._entityManager.addNewEntity(this._player);
+        // Reset the map offset
+        this._map._display_position_offset = 0;
+        // Hide the gameover screen
         this._HTMLManager.hideGameOverScreen();
     }
 

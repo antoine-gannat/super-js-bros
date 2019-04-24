@@ -8,4 +8,17 @@ class RessourceSound extends Ressource {
         this._audio.currentTime = 0;
         this._audio.play();
     }
+
+    playLoop() {
+        this._audio.currentTime = 0;
+        this._audio.addEventListener('ended', function () {
+            this.currentTime = 0;
+            this.play();
+        }, false);
+        this._audio.play();
+    }
+
+    stop() {
+        this._audio.pause();
+    }
 }
