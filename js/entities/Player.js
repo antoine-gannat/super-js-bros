@@ -3,7 +3,7 @@ class Player extends Entity {
         super(game, new Position(0, (MAP_HEIGHT - 5) * BLOCK_HEIGHT),
             new Size(40, 85),
             new Speed(BLOCK_WIDTH / 30, BLOCK_WIDTH / 10),
-            game._resManager.getRessourceByName("pablo").clone(),
+            game._resManager.getRessourceByName("mario").clone(),
             DIRECTIONS.right);
         this._game = game;
         this._team = TEAMS.friend;

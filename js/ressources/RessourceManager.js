@@ -16,7 +16,7 @@ class RessourceManager {
 
         // Pre Load sprites
         this._ressources.push(new RessourceSprite("koopa", images_folder_path + "sprite_koopa.png", 27, 32, 9, 20));
-        this._ressources.push(new RessourceSprite("pablo", images_folder_path + "pablo.png", 62, 95, 4, 20));
+        this._ressources.push(new RessourceSprite("mario", images_folder_path + "mario.png", 62, 95, 4, 20));
 
         // Load sounds
         this._ressources.push(new RessourceSound("mario_jump", sounds_folder_path + "mario_jump.ogg"));
