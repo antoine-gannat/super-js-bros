@@ -1,6 +1,5 @@
 class Physics {
-    constructor(game) {
-        this._game = game;
+    constructor() {
         this._gravity_force = Math.round(BLOCK_HEIGHT / 15);
     }
 
@@ -12,9 +11,9 @@ class Physics {
         var center_pos = new Position(position.x + size.width / 2, position.y + size.height);
 
         // Get block located at each foot
-        var right_foot_block = this._game._map.getBlockAtPos(new Convertion().screenPosToBlockPos(right_foot_pos));
-        var left_foot_block = this._game._map.getBlockAtPos(new Convertion().screenPosToBlockPos(left_foot_pos));
-        var center_block = this._game._map.getBlockAtPos(new Convertion().screenPosToBlockPos(center_pos));
+        var right_foot_block = g_game._map.getBlockAtPos(new Convertion().screenPosToBlockPos(right_foot_pos));
+        var left_foot_block = g_game._map.getBlockAtPos(new Convertion().screenPosToBlockPos(left_foot_pos));
+        var center_block = g_game._map.getBlockAtPos(new Convertion().screenPosToBlockPos(center_pos));
 
         if (left_foot_block || right_foot_block || center_block)
             return (true);
@@ -24,7 +23,7 @@ class Physics {
     // Check if an entity hit another entity
     checkEntitiesHit(entity) {
         var entities_hit = [];
-        this._game._entityManager._entities.forEach((e) => {
+        g_game._entityManager._entities.forEach((e) => {
             // Don't count itself
             if (entity._id === e._id)
                 return;

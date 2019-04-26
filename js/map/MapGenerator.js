@@ -1,16 +1,11 @@
-class MapBlock {
-    constructor(type, position) {
-        this._type = type;
-        this._position = position;
-    }
-}
-
 class MapGenerator {
     constructor(map_size) {
         if (!map_size || map_size < 10)
             throw new Error("Map size must be at least 10");
         this._map_size = map_size;
         this._map = [];
+
+        this._blockFactory = new BlockFactory();
 
         this._block_generation_fct = [
             { type: MAP_BLOC_TYPES.grass, fct: this.generateGrass.bind(this) }
@@ -20,7 +15,7 @@ class MapGenerator {
     generateStartingPlatform() {
         // Generate 5 blocs of grass
         for (var i = 0; i < STARTING_PLATFORM_SIZE; i++)
-            this._map.push(new MapBlock(MAP_BLOC_TYPES.grass, new Position(i, MAP_HEIGHT - 1)));
+            this._map.push(this._blockFactory.newBlock(MAP_BLOC_TYPES.grass, new Position(i, MAP_HEIGHT - 1)));
     }
 
     getNextBlockHeight(previous_block) {
@@ -39,18 +34,23 @@ class MapGenerator {
         return (MAP_BLOC_TYPES.grass);
     }
 
+    // Generation functions //
+
     generateGrass(new_block) {
         this.generateDefaultBlock(new_block);
         // Add blocs of dirt below the grass until the last row
         for (var y = new_block._position.y + 1; y <= MAP_HEIGHT - 1; y++) {
             // Add the block
-            this._map.push(new MapBlock(MAP_BLOC_TYPES.dirt, new Position(new_block._position.x, y)));
+            this._map.push(this._blockFactory.newBlock(MAP_BLOC_TYPES.dirt, new Position(new_block._position.x, y)));
         }
     }
+
     generateDefaultBlock(new_block) {
         // Add the block
         this._map.push(new_block);
     }
+
+    // //
 
     generate() {
         // Generate a flat platform at the begining of each map
@@ -64,7 +64,7 @@ class MapGenerator {
             // Get the height of the new block
             var new_block_pos = new Position(col_nb, this.getNextBlockHeight(previous_block));
             // Create the block
-            var new_block = new MapBlock(block_type, new_block_pos);
+            var new_block = this._blockFactory.newBlock(block_type, new_block_pos);
 
             // Save this block for the next loop
             var previous_block = new_block;

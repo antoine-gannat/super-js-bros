@@ -1,5 +1,6 @@
 // Create an instance of Game
-var game = new Game();
+var g_game = new Game();
 
+g_game.init();
 // Render at 60 frames per seconds
-setInterval(() => { game.renderFrame() }, 60 / 1000);
+setInterval(() => { g_game.renderFrame() }, 60 / 1000);

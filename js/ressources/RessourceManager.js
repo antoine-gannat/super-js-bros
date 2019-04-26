@@ -1,7 +1,6 @@
 class RessourceManager {
-    constructor(game) {
-        this._game = game;
-        this._canvas = game._canvas;
+    constructor() {
+        this._canvas = g_game._canvas;
         this._ctx = this._canvas.getContext("2d");
         this._ressources = [];
 
@@ -15,7 +14,7 @@ class RessourceManager {
         this._ressources.push(new RessourceImage("dirt", images_folder_path + "dirt.jpg"));
 
         // Pre Load sprites
-        this._ressources.push(new RessourceSprite("koopa", images_folder_path + "sprite_koopa.png", 27, 32, 9, 20));
+        this._ressources.push(new RessourceSprite("koopa", images_folder_path + "koopa.png", 27, 32, 9, 20));
         this._ressources.push(new RessourceSprite("mario", images_folder_path + "mario.png", 62, 95, 4, 20));
 
         // Load sounds
@@ -45,14 +44,26 @@ class RessourceManager {
     }
 
     playSound(name, loop = false) {
+        // If the sound is turned off, we leave
+        if (g_game._sounds_muted)
+            return;
+
+        // Get the sound to play
         var sound = this.getRessourceByName(name);
 
+        // If the sound is not found
         if (!sound)
             throw new Error("Sound: " + name + " not found");
+        // Play the sound in loop
         if (loop === true)
             sound.playLoop();
         else
             sound.play();
+    }
+
+    stopAllSounds() {
+        var sounds = this._ressources.filter((r) => { return (r._type === RESSOURCE_TYPES.sound) });
+        sounds.forEach((s) => { s._audio.pause(); });
     }
 
     stopSound(name) {

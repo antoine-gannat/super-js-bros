@@ -1,7 +1,6 @@
 class EventManager {
-    constructor(game) {
-        this._game = game;
-        this._canvas = game._canvas;
+    constructor() {
+        this._canvas = g_game._canvas;
         this._keys_pressed = [];
 
         this._canvas.addEventListener("click", this.onClick.bind(this));
@@ -19,8 +18,8 @@ class EventManager {
     // Events
 
     onKeyDown(e) {
-        if (!this._game._music_started)
-            this._game.startSoundtrack();
+        if (!g_game._music_started)
+            g_game.startSoundtrack();
         // Search if the key is already is the array
         var key_index = this._keys_pressed.findIndex((key) => { return (key === e.key) });
         // If so, leave
@@ -46,19 +45,19 @@ class EventManager {
     // Event callbacks
 
     movePlayerRight() {
-        if (this._game._player)
-            this._game._player.moveX(this._game._player._speed.horizontal);
+        if (g_game._player)
+            g_game._player.moveX(g_game._player._speed.horizontal);
     }
 
     movePlayerLeft() {
-        if (this._game._player)
-            this._game._player.moveX(-this._game._player._speed.horizontal);
+        if (g_game._player)
+            g_game._player.moveX(-g_game._player._speed.horizontal);
     }
 
     jump() {
         // jump 3 blocs
-        if (this._game._player)
-            this._game._player.jump();
+        if (g_game._player)
+            g_game._player.jump();
     }
 
     executeEvents() {

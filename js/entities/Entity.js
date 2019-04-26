@@ -20,10 +20,9 @@ class Jump {
 }
 
 class Entity {
-    constructor(game, position, size, speed, asset, asset_orientation) {
+    constructor(position, size, speed, asset, asset_orientation) {
         // Assign a unique id
         this._id = Symbol();
-        this._game = game;
         this._position = position;
         this._size = size;
         this._direction = DIRECTIONS.right;
@@ -43,13 +42,13 @@ class Entity {
 
     // Remove the entity from the entities list
     die() {
-        this._game._entityManager.deleteEntity(this._id);
+        g_game._entityManager.deleteEntity(this._id);
     }
 
     moveX(xMovement) {
         if (this._position.x + xMovement < 0)
             return;
-        if (!this._game._physics.allowEntityMovement(this, new Position(this._position.x + xMovement, this._position.y - 4)))
+        if (!g_game._physics.allowEntityMovement(this, new Position(this._position.x + xMovement, this._position.y - 4)))
             return;
         if (xMovement < 0)
             this._direction = DIRECTIONS.left;
@@ -75,7 +74,7 @@ class Entity {
 
     jump() {
         // If the player is currently jumping or falling, leave
-        if (this._jumping || this._game._physics.isEntityFalling(this)) {
+        if (this._jumping || g_game._physics.isEntityFalling(this)) {
             return (false);
         }
         // Jump
@@ -94,7 +93,7 @@ class Entity {
         // Display the entity
         // If a custom position exist
         var flip = new Flip((this._direction !== this._asset_orientation));
-        var display_position = new Position(this._position.x - this._game._map._display_position_offset, this._position.y);
-        this._game._resManager.render(this._asset, display_position, this._size, flip);
+        var display_position = new Position(this._position.x - g_game._map._display_position_offset, this._position.y);
+        g_game._resManager.render(this._asset, display_position, this._size, flip);
     }
 }

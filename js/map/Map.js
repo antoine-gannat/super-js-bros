@@ -1,6 +1,5 @@
 class Map {
-    constructor(game) {
-        this._game = game;
+    constructor() {
         this._map_width = MAP_WIDTH * 3;
         this._map = new MapGenerator(this._map_width).generate();
         // Offset used to display only the part of the map the player is on
@@ -16,8 +15,13 @@ class Map {
     }
 
     getMapHeightAt(column) {
+        var heighest = MAP_HEIGHT;
         var all_block_in_column = this._map.filter((block) => { return (block._position.x === column) });
-        return (all_block_in_column.length);
+        all_block_in_column.forEach((block) => {
+            if (block._position.y < heighest)
+                heighest = block._position.y;
+        });
+        return (MAP_HEIGHT - heighest);
     }
 
     // Get the block at the position 'position'
@@ -28,14 +32,14 @@ class Map {
     // Get the left and right distance from the player to the map border
     getPlayerBorderDistance() {
         // Get the player position to the left of the map
-        var left_distance = this._game._player._position.x - this._display_position_offset;
+        var left_distance = g_game._player._position.x - this._display_position_offset;
         // Get the player position to the right of the map
-        var right_distance = window.innerWidth - this._game._player._position.x + this._display_position_offset;
+        var right_distance = window.innerWidth - g_game._player._position.x + this._display_position_offset;
         return ({ left: left_distance, right: right_distance });
     }
 
     updateRenderDistance() {
-        if (!this._game._player)
+        if (!g_game._player)
             return;
         // Get the player distance from the sides of the screen
         const border_distance = this.getPlayerBorderDistance();
@@ -55,7 +59,7 @@ class Map {
 
     // Render a block
     renderBlock(block) {
-        this._game._resManager.render(this._game._resManager.getRessourceByName(block._type),
+        g_game._resManager.render(g_game._resManager.getRessourceByName(block._type),
             new Position(block._position.x * BLOCK_WIDTH - this._display_position_offset, block._position.y * BLOCK_HEIGHT),
             new Size(BLOCK_WIDTH, BLOCK_HEIGHT));
     }

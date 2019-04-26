@@ -8,29 +8,32 @@ class Game {
         this._ctx.canvas.width = window.innerWidth;
         this._ctx.canvas.height = window.innerHeight;
 
+        // True if the music has started
+        this._music_started = false;
+        this._sounds_muted = false;
+    }
+
+    // Init the main classes
+    init() {
         // Get the ressources manager
-        this._resManager = new RessourceManager(this);
-        this._eventManager = new EventManager(this);
+        this._resManager = new RessourceManager();
+        this._eventManager = new EventManager();
 
         // The map
-        this._map = new Map(this);
+        this._map = new Map();
 
         // The physics
-        this._physics = new Physics(this);
-
-        // Entities
+        this._physics = new Physics();
 
         // Create the player
-        this._player = new Player(this);
+        this._player = new Player();
 
         // Create the entity manager
-        this._entityManager = new EntityManager(this);
+        this._entityManager = new EntityManager();
         this._entityManager.addNewEntity(this._player);
 
         // HTML manager used to control html elements over the canvas (gameover, etc ..)
-        this._HTMLManager = new HTMLManager(this);
-        // True if the music has started
-        this._music_started = false;
+        this._HTMLManager = new HTMLManager();
     }
 
     startSoundtrack() {
@@ -50,12 +53,26 @@ class Game {
     }
 
     restart() {
-        this._player = new Player(this);
+        this._player = new Player();
         this._entityManager.addNewEntity(this._player);
         // Reset the map offset
         this._map._display_position_offset = 0;
         // Hide the gameover screen
         this._HTMLManager.hideGameOverScreen();
+    }
+
+    // Turn on or off the sound
+    switchMuteSounds() {
+        // If the sound is already muted, we unmute
+        if (this._sounds_muted)
+            this._sounds_muted = false;
+        // Otherwise we mute the sound
+        else {
+            this._sounds_muted = true;
+            this._resManager.stopAllSounds();
+        }
+        // Change the icon in the mute btn
+        this._HTMLManager.changeMuteBtn();
     }
 
     renderFrame() {
