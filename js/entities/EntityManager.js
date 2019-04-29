@@ -6,12 +6,14 @@ class EntityManager {
     }
 
     generateEnemies() {
-        var enemy_count = g_game._map._map_width / 10;
+        var enemy_count = g_game._map._map_length / 10;
         var entity_block_height = 2;
 
         for (var i = 0; i < enemy_count; i++) {
-            var x_pos = Math.floor(Math.random() * (g_game._map._map_width - STARTING_PLATFORM_SIZE)) + STARTING_PLATFORM_SIZE;
-            var y_pos = BLOCK_HEIGHT * (MAP_HEIGHT - entity_block_height - g_game._map.getMapHeightAt(x_pos));
+            // Generate the x position for the enemy
+            var x_pos = Math.floor(Math.random() * (g_game._map._map_length - STARTING_PLATFORM_SIZE)) + STARTING_PLATFORM_SIZE;
+            // Set the enemy y position right above the highest component at x = x_pos
+            var y_pos = BLOCK_HEIGHT * (g_game._map.getMapHeightAt(x_pos) - entity_block_height);
             this._entities.push(new Koopa(new Position(x_pos * BLOCK_WIDTH, y_pos)));
         }
     }

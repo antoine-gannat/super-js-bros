@@ -1,32 +1,41 @@
 class Map {
     constructor() {
-        this._map_width = MAP_WIDTH * 3;
-        this._map = new MapGenerator(this._map_width).generate();
+        this._map_length = MAP_WIDTH * 3;
+        this._map_height = MAP_HEIGHT;
+        // Generate a new map of height: 'this._map_height' and width: this._map_length
+        this._map = new MapGenerator(this._map_length, this._map_height).generate();
         // Offset used to display only the part of the map the player is on
         // When the player move to the right of the map, this variable increase
         this._display_position_offset = 0;
 
         // Minimum render distance from the left and right of the map
+        // The will always see at least half of the map on the right
+        // And at least a quarter on the left
         this._right_render_distance = window.innerWidth / 2;
         this._left_render_distance = window.innerWidth / 4;
 
-        // Number of blocs display outside of the screen (avoid blanks while loading)
-        this._extra_display_block = 1;
+        // Number of component to display outside of the screen (avoid blanks while moving)
+        this._extra_display_components = 1;
     }
 
+    // Get the y value of the highest component in the map at x: 'column'
     getMapHeightAt(column) {
-        var heighest = MAP_HEIGHT;
-        var all_block_in_column = this._map.filter((block) => { return (block._position.x === column) });
-        all_block_in_column.forEach((block) => {
-            if (block._position.y < heighest)
-                heighest = block._position.y;
-        });
-        return (MAP_HEIGHT - heighest);
+        // Set the height at 0
+        var height = 0;
+        // While we haven't reach the last row and the components are null
+        while (height < this._map[column].length && this._map[column][height] === null) {
+            // Increase the height
+            height++;
+        }
+        return (height);
     }
 
     // Get the block at the position 'position'
     getBlockAtPos(position) {
-        return (this._map.find((block) => { return (block._position.x === position.x && block._position.y === position.y) }));
+        if (position.x < 0 || position.y < 0 ||
+            position.x >= this._map_length || position.y >= this._map_height)
+            return (null);
+        return (this._map[position.x][position.y]);
     }
 
     // Get the left and right distance from the player to the map border
@@ -38,7 +47,8 @@ class Map {
         return ({ left: left_distance, right: right_distance });
     }
 
-    updateRenderDistance() {
+    // Change the display offset based on the player's position
+    updateDisplayOffset() {
         if (!g_game._player)
             return;
         // Get the player distance from the sides of the screen
@@ -57,21 +67,32 @@ class Map {
         }
     }
 
-    // Render a block
-    renderBlock(block) {
-        g_game._resManager.render(g_game._resManager.getRessourceByName(block._type),
-            new Position(block._position.x * BLOCK_WIDTH - this._display_position_offset, block._position.y * BLOCK_HEIGHT),
-            new Size(BLOCK_WIDTH, BLOCK_HEIGHT));
-    }
-
     render() {
-        // Update the render distance
-        this.updateRenderDistance();
+        // Update the display offset based on the player's position
+        this.updateDisplayOffset();
+
+        // Find the first column to display based on the 'display_position_offset'
+        var first_column_to_display = Math.round((this._display_position_offset / BLOCK_WIDTH));
+
+        // If the first column is not 0, we display an extra component
+        if (first_column_to_display > 0)
+            first_column_to_display -= this._extra_display_components;
+
+        // Last column to display: 
+        // - the width of the map
+        // - + the first column to display
+        // - + two times the extra display components
+        var last_column_to_display = MAP_WIDTH + first_column_to_display + (2 * this._extra_display_components);
+
         // Display the map
-        var first_block_to_display = Math.round((this._display_position_offset / BLOCK_WIDTH));
-        for (var i = first_block_to_display; i < this._map.length
-            && this._map[i]._position.x < MAP_WIDTH + first_block_to_display + this._extra_display_block; i++) {
-            this.renderBlock(this._map[i]);
+        for (var column = first_column_to_display; column < this._map_length
+            && column < last_column_to_display; column++) {
+            // For each components in column: 'column'
+            this._map[column].forEach((component) => {
+                // If the component is not null, render it
+                if (component !== null)
+                    component.render();
+            });
         }
     }
 }
