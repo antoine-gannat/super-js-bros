@@ -5,7 +5,15 @@ class MapComponent {
         this._size = size;
     }
 
-    // Display the block
+    onCollision(entity, direction) {
+    }
+
+    // Remove the component from the map
+    destroy() {
+        g_game._map.deleteComponent(this._position);
+    }
+
+    // Display the component
     render() {
         // Get the map offset
         const map_display_offset = g_game._map._display_position_offset;

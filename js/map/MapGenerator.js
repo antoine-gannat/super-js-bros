@@ -60,10 +60,13 @@ class MapGenerator {
         var new_height = this._last_component_changed._position.y;
         // 50% of chance to go higher
         var go_higher = Math.round(Math.random());
+        // If 'go_higher' is true and we can go higher
         if (go_higher && new_height - 1 >= 0)
             new_height--;
+        // Otherwise
         else if (!go_higher && new_height + 1 < MAP_HEIGHT)
             new_height++;
+        // Return the new component
         return (this._componentsFactory.newComponent(MAP_COMPONENT_TYPES.grass, new Position(map_col, new_height)));
     }
 
@@ -75,12 +78,14 @@ class MapGenerator {
         this.generateStartingPlatform();
 
         for (var map_col = STARTING_PLATFORM_SIZE; map_col < this._map_length; map_col++) {
-            // Create a new componenet
+            // Create a new component
             var new_component = this.generateMountains(map_col);
             // Add the component to the map
             this.changeMapComponent(new_component);
+            // Fill the rest of the map with dirt components
             this.fillBelowWithComponentType(map_col, MAP_COMPONENT_TYPES.dirt);
         }
+        this.changeMapComponent(this._componentsFactory.newComponent(MAP_COMPONENT_TYPES.chest, new Position(1, 16)), false);
         return (this._map);
     }
 }

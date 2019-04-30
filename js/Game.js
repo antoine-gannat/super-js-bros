@@ -34,6 +34,9 @@ class Game {
 
         // HTML manager used to control html elements over the canvas (gameover, etc ..)
         this._HTMLManager = new HTMLManager();
+
+        // Fight manager used to tell which entity win or loose during a fight
+        this._fightManager = new FightManager();
     }
 
     startSoundtrack() {
@@ -79,13 +82,17 @@ class Game {
         // clear the canvas
         this._ctx.clearRect(0, 0, this._canvas.width, this._canvas.height);
 
-        // Execute events
+        // Execute input events
         this._eventManager.executeEvents();
+
+        // Apply the physics 
+        this._physics.applyPhysics();
 
         // Display the map
         this._map.render();
 
         // Render the entities
         this._entityManager.render();
+
     }
 }

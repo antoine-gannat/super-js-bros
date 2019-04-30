@@ -30,12 +30,29 @@ class Map {
         return (height);
     }
 
-    // Get the block at the position 'position'
-    getBlockAtPos(position) {
+    // Get the omponent at the position 'position'
+    getComponentAtPos(position) {
         if (position.x < 0 || position.y < 0 ||
             position.x >= this._map_length || position.y >= this._map_height)
             return (null);
         return (this._map[position.x][position.y]);
+    }
+
+    getComponentsNearEntity(entity, nb_column = 3) {
+        // Get the first column displayed
+        var first_column_displayed = Math.round((entity._position.x / BLOCK_WIDTH)) - nb_column;
+        if (first_column_displayed < 0)
+            first_column_displayed = 0;
+        // Get the last column displayed
+        var last_column_displayed = first_column_displayed + 2 * nb_column;
+        // Output array
+        var components = [];
+
+        // Take components from each column between 'first_column_displayed' and 'last_column_displayed'
+        for (var column = first_column_displayed; column < this._map_length && column < last_column_displayed; column++) {
+            components = components.concat(this._map[column].filter((component) => { return (component !== null) }));
+        }
+        return (components);
     }
 
     // Get the left and right distance from the player to the map border
@@ -53,7 +70,7 @@ class Map {
             return;
         // Get the player distance from the sides of the screen
         const border_distance = this.getPlayerBorderDistance();
-        // Get the position of the player in blocks
+        // Get the position of the player in components
         // If the player is close to the left side of the screen, we increase the 'display_position' offset
         if (border_distance.right < this._right_render_distance) {
             this._display_position_offset += this._right_render_distance - border_distance.right;
@@ -65,6 +82,12 @@ class Map {
             if (this._display_position_offset < 0)
                 this._display_position_offset = 0;
         }
+    }
+
+    deleteComponent(position) {
+        if (position.x >= 0 && position.x < this._map_length
+            && position.y >= 0 && position.y < this._map_height)
+            this._map[position.x][position.y] = null;
     }
 
     render() {

@@ -22,6 +22,14 @@ class EntityManager {
         this._entities.push(entity);
     }
 
+    // Return the entities present on the screen
+    getEntitiesOnScreen() {
+        return this._entities.filter((e) => {
+            return (e._position.x - g_game._map._display_position_offset >= 0
+                && e._position.x - g_game._map._display_position_offset <= window.innerWidth);
+        });
+    }
+
     // Remove an entity from the entities array
     deleteEntity(entity_id) {
         // Find the entity to kill
@@ -34,26 +42,8 @@ class EntityManager {
     }
 
     render() {
-        this._entities.forEach((entity) => {
-            // Apply gravity to the player
-            g_game._physics.applyGravityToEntity(entity);
-            // Check collision with other entities
-            g_game._physics.checkEntitiesHit(entity).forEach((e) => {
-                // If the entites are not in the same team
-                if (entity._team !== e._team) {
-                    var ally = (entity._team === TEAMS.friend ? entity : e);
-                    var enemy = (entity._team === TEAMS.friend ? e : entity);
-                    var ally_feet_pos = ally._position.y + ally._size._height;
-                    var enemy_head_pos = enemy._position.y;
-
-                    if (enemy_head_pos - 3 <= ally_feet_pos && ally_feet_pos <= enemy_head_pos + 3) {
-                        ally.forceJump();
-                        enemy.die();
-                    }
-                    else
-                        ally.die();
-                }
-            });
+        // Render entities present on the screen
+        this.getEntitiesOnScreen().forEach((entity) => {
             entity.render();
         });
     }

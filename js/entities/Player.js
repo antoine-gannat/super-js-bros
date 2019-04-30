@@ -4,8 +4,8 @@ class Player extends Entity {
             new Size(40, 85),
             new Speed(BLOCK_WIDTH / 30, BLOCK_WIDTH / 10),
             g_game._resManager.getRessourceByName("mario").clone(),
-            DIRECTIONS.right);
-        this._team = TEAMS.friend;
+            DIRECTIONS.east);
+        this._team = TEAMS.friendly;
     }
 
     jump() {

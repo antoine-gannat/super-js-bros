@@ -4,6 +4,7 @@ class ComponentsFactory {
         this._components = [
             { type: MAP_COMPONENT_TYPES.grass, class: Grass },
             { type: MAP_COMPONENT_TYPES.castle, class: Castle },
+            { type: MAP_COMPONENT_TYPES.chest, class: Chest },
             { type: MAP_COMPONENT_TYPES.dirt, class: Dirt }
         ];
     }

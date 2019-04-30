@@ -13,7 +13,8 @@ const STARTING_PLATFORM_SIZE = 5;
 const MAP_COMPONENT_TYPES = {
     grass: "grass",
     dirt: "dirt",
-    castle: "castle"
+    castle: "castle",
+    chest: "chest"
 };
 
 // type of blocks
@@ -25,12 +26,14 @@ const RESSOURCE_TYPES = {
 
 // Different directions
 const DIRECTIONS = {
-    left: "left",
-    right: "right"
+    north: "north",
+    south: "south",
+    east: "east",
+    west: "west"
 };
 
 // Different teams
 const TEAMS = {
-    friend: "friend",
+    friendly: "friendly",
     enemy: "enemy"
 };

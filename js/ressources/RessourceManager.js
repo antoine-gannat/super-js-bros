@@ -16,6 +16,7 @@ class RessourceManager {
         this._ressources.push(new RessourceImage("grass", images_folder_path + "grass.jpg"));
         this._ressources.push(new RessourceImage("dirt", images_folder_path + "dirt.jpg"));
         this._ressources.push(new RessourceImage("castle", images_folder_path + "castle.png"));
+        this._ressources.push(new RessourceImage("chest", images_folder_path + "chest.png"));
 
         // Pre Load sprites
         this._ressources.push(new RessourceSprite("koopa", images_folder_path + "koopa.png", 27, 32, 9, 20));

@@ -1,3 +1,4 @@
+// Jump class, used when an entity is jumping
 class Jump {
     constructor(entity, height, speed) {
         this._entity = entity;
@@ -25,7 +26,7 @@ class Entity {
         this._id = Symbol();
         this._position = position;
         this._size = size;
-        this._direction = DIRECTIONS.right;
+        this._direction = DIRECTIONS.east;
         this._speed = speed;
         this._asset = asset;
         this._asset.attachEntity(this);
@@ -38,6 +39,9 @@ class Entity {
 
         // True if the player has move since the last sprite render
         this._has_moved = false;
+
+        // Save the last position of the entity (default is -1, -1)
+        this._last_position = new Position(Number(position.x), Number(position.y));
     }
 
     // Remove the entity from the entities list
@@ -45,15 +49,21 @@ class Entity {
         g_game._entityManager.deleteEntity(this._id);
     }
 
+    // Movements //
+
     moveX(xMovement) {
         if (this._position.x + xMovement < 0)
             return;
-        if (!g_game._physics.allowEntityMovement(this, new Position(this._position.x + xMovement, this._position.y - 4)))
+        if (!g_game._physics.allowEntityMovement(this,
+            new Position(this._position.x + xMovement, this._position.y - 4)))
             return;
         if (xMovement < 0)
-            this._direction = DIRECTIONS.left;
+            this._direction = DIRECTIONS.west;
         else
-            this._direction = DIRECTIONS.right;
+            this._direction = DIRECTIONS.east;
+        // Save the last position
+        this._last_position.x = Number(this._position.x);
+        // Update the position
         this._position.x += xMovement;
         this._has_moved = true;
     }
@@ -61,11 +71,16 @@ class Entity {
     moveY(yMovement) {
         if (this._position.y + yMovement < 0)
             return;
+        // Save the last position
+        this._last_position.y = Number(this._position.y);
+        // Update the position
         this._position.y += yMovement;
         // If the player fell out of the world
         if (this._position.y > MAP_HEIGHT * BLOCK_HEIGHT)
             this.die();
     }
+
+    // Jump //
 
     forceJump() {
         // Jump
@@ -74,7 +89,7 @@ class Entity {
 
     jump() {
         // If the player is currently jumping or falling, leave
-        if (this._jumping || g_game._physics.isEntityFalling(this)) {
+        if (this._jumping || this.isFalling()) {
             return (false);
         }
         // Jump
@@ -87,6 +102,12 @@ class Entity {
         if (this._jumping && !this._jumping.execute())
             this._jumping = null;
     }
+
+    isFalling() {
+        return (g_game._physics.isEntityFalling(this));
+    }
+
+    // /Jump //
 
     render() {
         this.updateJump();
