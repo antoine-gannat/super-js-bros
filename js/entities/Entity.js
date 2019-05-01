@@ -90,9 +90,10 @@ class Entity {
     jump(overwrite = false) {
         // If the player is currently jumping or falling, leave
         if (!overwrite && (this._in_the_air || this._jump_distance > 0)) {
-            return;
+            return (false);
         }
         this._jump_distance = BLOCK_HEIGHT * 4;
+        return (true);
     }
 
     updateJump() {
