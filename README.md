@@ -1,5 +1,5 @@
 # super-JS-bros
-A mario-bros like game in Javascript.
+A re-implementation of the game 'Super Mario Bros' in Javascript.
 
 # Usage
 
