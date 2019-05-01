@@ -61,6 +61,13 @@ class Game {
         }
     }
 
+    onPlayerWin() {
+        // Kill the player to stop displaying him
+        this._player._alive = false;
+        // Display the victory screen
+        this._HTMLManager.displayVictoryScreen();
+    }
+
     restart() {
         // Reset the player's position
         this._player.revive(new Position(0, (MAP_HEIGHT - 5) * BLOCK_HEIGHT));

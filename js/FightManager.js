@@ -26,6 +26,7 @@ class FightManager {
         if (((hit_direction.north || hit_direction.south) && friendly._position.y < enemy._position.y)) {
             // Jump on top of the enemy
             friendly.jump(true);
+            friendly.increaseKillNb();
             // Kill the neemy
             enemy.die();
         }
@@ -33,6 +34,7 @@ class FightManager {
         else {
             // Kill the friendly unit
             friendly.die();
+            enemy.increaseKillNb();
         }
     }
 }

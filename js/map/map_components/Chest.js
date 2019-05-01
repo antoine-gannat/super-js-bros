@@ -4,8 +4,9 @@ class Chest extends MapComponent {
     }
 
     onCollision(entity, direction) {
-        // If hit underneath, get destroyed
-        if (direction.south === true)
-            this.destroy();
+        // If hit comes from somewhere else than underneath, return
+        if (direction.south === false)
+            return;
+        this.destroy();
     }
 }

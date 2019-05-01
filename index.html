@@ -22,14 +22,20 @@
         <i id="sound-mute-icon" class="fas fa-volume-up"></i>
     </button>
     <!-- Restart screen -->
-    <div id="restart-screen" class="death-container text-center">
+    <div id="restart-screen" class="screen-container text-center">
         <h2 id="restart-text">You died !</h2>
         <p><span id="lives_remaining"></span> lives left.</p>
         <button class="btn btn-primary" onclick="g_game.restart()">Restart</button>
     </div>
     <!-- Game over screen -->
-    <div id="gameover-screen" class="death-container text-center">
+    <div id="gameover-screen" class="screen-container text-center">
         <h2>Game Over !</h2>
+        <button class="btn btn-primary" onclick="window.location.reload()">Restart</button>
+    </div>
+    <!-- Victory screen -->
+    <div id="victory-screen" class="screen-container text-center">
+        <h2>Victory !</h2>
+        <p>Your score: <span id="victory-score"></span></p>
         <button class="btn btn-primary" onclick="window.location.reload()">Restart</button>
     </div>
     <!-- Import scripts -->

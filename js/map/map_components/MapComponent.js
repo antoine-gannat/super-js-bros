@@ -1,8 +1,8 @@
 class MapComponent {
-    constructor(asset, position, size = new Size(BLOCK_WIDTH, BLOCK_HEIGHT), transparent = false) {
+    constructor(asset, position, size = new Size(BLOCK_WIDTH, BLOCK_HEIGHT)) {
         this._position = position;
         this._size = size;
-        this._transparent = transparent;
+        this._transparent = false;
         this._asset = asset;
     }
 

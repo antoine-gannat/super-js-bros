@@ -10,6 +10,7 @@ class Entity {
         this._asset.attachEntity(this);
         this._asset_orientation = asset_orientation;
         this._team = undefined;
+        this._kill_nb = 0;
         // Alive status
         this._alive = true;
         // Velocity of the entity
@@ -52,6 +53,10 @@ class Entity {
     revive(revive_position) {
         this._position = revive_position;
         this._alive = true;
+    }
+
+    increaseKillNb() {
+        this._kill_nb++;
     }
 
     // Movements //

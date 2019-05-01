@@ -12,13 +12,12 @@ class Player extends Entity {
 
     increaseCoins() {
         this._coins++;
-        console.log(this._coins);
     }
 
     jump(overwrite = false) {
         if (!super.jump(overwrite))
             return;
-        g_game._resManager.playSound("mario_jump");
+        g_game._resManager.playSound("mario_jump", 0.5);
     }
 
     die() {
