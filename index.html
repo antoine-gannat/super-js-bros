@@ -22,13 +22,13 @@
         <i id="sound-mute-icon" class="fas fa-volume-up"></i>
     </button>
     <!-- Restart screen -->
-    <div id="restart-screen" class="container text-center death-container">
+    <div id="restart-screen" class="death-container text-center">
         <h2 id="restart-text">You died !</h2>
         <p><span id="lives_remaining"></span> lives left.</p>
         <button class="btn btn-primary" onclick="g_game.restart()">Restart</button>
     </div>
     <!-- Game over screen -->
-    <div id="gameover-screen" class="container text-center death-container">
+    <div id="gameover-screen" class="death-container text-center">
         <h2>Game Over !</h2>
         <button class="btn btn-primary" onclick="window.location.reload()">Restart</button>
     </div>
