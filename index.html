@@ -18,9 +18,6 @@
 
 <body>
     <canvas id="canvas"></canvas>
-    <button class="btn" id="sound-mute-btn" onclick="g_game.switchMuteSounds()">
-        <i id="sound-mute-icon" class="fas fa-volume-up"></i>
-    </button>
     <!-- Restart screen -->
     <div id="restart-screen" class="screen-container text-center">
         <h2 id="restart-text">You died !</h2>
@@ -39,18 +36,27 @@
         <button class="btn btn-primary" onclick="window.location.reload()">Restart</button>
     </div>
     <!-- Import scripts -->
+
+    <!-- Constant values -->
     <script src="js/Constants.js"></script>
+    <!-- Common classes and tools -->
     <script src="js/tools/Speed.js"></script>
     <script src="js/tools/Flip.js"></script>
     <script src="js/tools/Position.js"></script>
     <script src="js/tools/Size.js"></script>
     <script src="js/tools/Convertion.js"></script>
+
+    <!-- Ressources -->
     <script src="js/ressources/Ressource.js"></script>
     <script src="js/ressources/RessourceSound.js"></script>
     <script src="js/ressources/RessourceImage.js"></script>
     <script src="js/ressources/RessourceSprite.js"></script>
     <script src="js/ressources/RessourceManager.js"></script>
+
+    <!-- Events (keyboard, mouse) -->
     <script src="js/events/EventManager.js"></script>
+
+    <!-- Map -->
     <script src="js/map/map_components/MapComponent.js"></script>
     <script src="js/map/map_components/Dirt.js"></script>
     <script src="js/map/map_components/Grass.js"></script>
@@ -60,12 +66,22 @@
     <script src="js/map/map_components/ComponentsFactory.js"></script>
     <script src="js/map/MapGenerator.js"></script>
     <script src="js/map/Map.js"></script>
+
+    <!-- Physic (gravity, collisions) -->
     <script src="js/physics/Physics.js"></script>
+
+    <!-- Entities -->
     <script src="js/entities/Entity.js"></script>
     <script src="js/entities/Enemy.js"></script>
     <script src="js/entities/Player.js"></script>
     <script src="js/entities/Koopa.js"></script>
     <script src="js/entities/EntityManager.js"></script>
+
+    <!-- Ui (user interface) -->
+    <script src="js/ui/Ui.js"></script>
+    <script src="js/ui/UiMute.js"></script>
+    <script src="js/ui/UiManager.js"></script>
+
     <script src="js/FightManager.js"></script>
     <script src="js/HTMLManager.js"></script>
     <script src="js/Game.js"></script>

@@ -41,6 +41,8 @@ class EventManager {
     }
 
     onClick(e) {
+        // Check if the click was on a ui element
+        g_game._uiManager.checkClickEvent(e);
     }
 
     // Event callbacks

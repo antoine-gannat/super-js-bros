@@ -17,6 +17,8 @@ class RessourceManager {
         this._ressources.push(new RessourceImage("dirt", images_folder_path + "dirt.jpg"));
         this._ressources.push(new RessourceImage("castle", images_folder_path + "castle.png"));
         this._ressources.push(new RessourceImage("chest", images_folder_path + "chest.png"));
+        this._ressources.push(new RessourceImage("mute-icon", images_folder_path + "mute.png"));
+        this._ressources.push(new RessourceImage("sound-icon", images_folder_path + "sound.png"));
 
         // Pre Load sprites
         this._ressources.push(new RessourceSprite("koopa", images_folder_path + "koopa.png", 27, 32, 9, 20));
@@ -60,7 +62,7 @@ class RessourceManager {
     // Play a specific sound, if 'loop' is true, the sound will be re-played once finished
     playSound(name, volume = 1.0, loop = false) {
         // If the sound is turned off, we leave
-        if (g_game._sounds_muted)
+        if (g_game._uiManager.getUiByName("mute")._sounds_muted)
             return;
 
         // Get the sound to play

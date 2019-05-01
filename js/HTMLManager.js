@@ -48,15 +48,4 @@ class HTMLManager {
         this.hideRestartScreen();
         this.hideVictoryScreen();
     }
-
-    // Mute sound button //
-    changeMuteBtn() {
-        if (!g_game._sounds_muted) {
-            document.getElementById("sound-mute-icon").className = "fas fa-volume-up";
-        }
-        else
-            document.getElementById("sound-mute-icon").className = "fas fa-volume-mute";
-        // Remove the focus to the button
-        document.getElementById("sound-mute-btn").blur();
-    }
 }

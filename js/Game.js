@@ -37,6 +37,9 @@ class Game {
 
         // Fight manager used to tell which entity win or loose during a fight
         this._fightManager = new FightManager();
+
+        // Ui manager used to render interfaces
+        this._uiManager = new UiManager();
     }
 
     startSoundtrack() {
@@ -79,20 +82,6 @@ class Game {
         this._HTMLManager.hideAllScreens();
     }
 
-    // Turn on or off the sound
-    switchMuteSounds() {
-        // If the sound is already muted, we unmute
-        if (this._sounds_muted)
-            this._sounds_muted = false;
-        // Otherwise we mute the sound
-        else {
-            this._sounds_muted = true;
-            this._resManager.stopAllSounds();
-        }
-        // Change the icon in the mute btn
-        this._HTMLManager.changeMuteBtn();
-    }
-
     renderFrame() {
         // clear the canvas
         this._ctx.clearRect(0, 0, this._canvas.width, this._canvas.height);
@@ -109,5 +98,7 @@ class Game {
         // Render the entities
         this._entityManager.render();
 
+        // Render the uis
+        this._uiManager.render();
     }
 }
