@@ -1,25 +1,3 @@
-// Jump class, used when an entity is jumping
-class Jump {
-    constructor(entity, height, speed) {
-        this._entity = entity;
-        this._speed = speed;
-        this._height_remaining = height;
-    }
-
-    // Called at each frame, execute the jump smoothly
-    // Return false once the jump is done
-
-    execute() {
-        if (this._height_remaining <= 0)
-            return (false);
-
-        this._height_remaining -= this._speed;
-        // Change the y position of the entity
-        this._entity.moveY(-this._speed);
-        return (true);
-    }
-}
-
 class Entity {
     constructor(position, size, speed, asset, asset_orientation) {
         // Assign a unique id
@@ -31,17 +9,36 @@ class Entity {
         this._asset = asset;
         this._asset.attachEntity(this);
         this._asset_orientation = asset_orientation;
-
-        // 
         this._team = undefined;
-        // not null if jumping
-        this._jumping = null;
-
+        // Velocity of the entity
+        this._velocity = 0;
+        // Force of a jump
+        this._jump_force = BLOCK_HEIGHT / 10;
+        // Distance remaining for this jump
+        this._jump_distance = 0;
+        // True if the entity is in the air
+        this._in_the_air = false;
         // True if the player has move since the last sprite render
         this._has_moved = false;
-
         // Save the last position of the entity (default is -1, -1)
         this._last_position = new Position(Number(position.x), Number(position.y));
+    }
+
+    // Getters and setters //
+
+    get velocity() {
+        return (this._velocity);
+    }
+
+    set velocity(new_value) {
+        // Do not reduce the velocity while the jump is in ascending phase
+        if (this._jump_distance > 0 && new_value < this._velocity)
+            return;
+        this._velocity = new_value;
+
+        // The downward velocity can not be inferior to the gravity force value
+        if (this._velocity < -GRAVITY_FORCE)
+            this._velocity = -GRAVITY_FORCE;
     }
 
     // Remove the entity from the entities list
@@ -71,6 +68,14 @@ class Entity {
     moveY(yMovement) {
         if (this._position.y + yMovement < 0)
             return;
+        if (!g_game._physics.allowEntityMovement(this,
+            new Position(this._position.x, this._position.y + yMovement))) {
+            if (yMovement > 0)
+                this._in_the_air = false;
+            return;
+        }
+        if (yMovement < 0)
+            this._in_the_air = true;
         // Save the last position
         this._last_position.y = Number(this._position.y);
         // Update the position
@@ -80,41 +85,40 @@ class Entity {
             this.die();
     }
 
-    // Jump //
-
-    forceJump() {
-        // Jump
-        this._jumping = new Jump(this, BLOCK_HEIGHT * 4, this._speed.vertical);
-    }
-
-    jump() {
+    // The entity jump
+    // If 'overwrite' is true, the entity will jump ignoring every restrictions 
+    jump(overwrite = false) {
         // If the player is currently jumping or falling, leave
-        if (this._jumping || this.isFalling()) {
-            return (false);
+        if (!overwrite && (this._in_the_air || this._jump_distance > 0)) {
+            return;
         }
-        // Jump
-        this._jumping = new Jump(this, BLOCK_HEIGHT * 4, this._speed.vertical);
-        return (true);
+        this._jump_distance = BLOCK_HEIGHT * 4;
     }
 
     updateJump() {
-        // If the player is done jumping, we set the _jumping variable value to null
-        if (this._jumping && !this._jumping.execute())
-            this._jumping = null;
+        if (this._jump_distance <= 0) {
+            return;
+        }
+        this.velocity = this._jump_force;
+        this._jump_distance -= this._jump_force;
     }
 
+    // Return true if the entity is falling
     isFalling() {
-        return (g_game._physics.isEntityFalling(this));
+        return (this._in_the_air && this._velocity < 0);
     }
-
-    // /Jump //
 
     render() {
+        // Move on the y axis according to the velocity
+        // The velocity is set to its negative value because the y0 is at the top of the screen
+        this.moveY(-this._velocity);
         this.updateJump();
-        // Display the entity
+
         // If a custom position exist
         var flip = new Flip((this._direction !== this._asset_orientation));
+        // Calculate the position to display according to the map offst
         var display_position = new Position(this._position.x - g_game._map._display_position_offset, this._position.y);
+        // Display the entity
         g_game._resManager.render(this._asset, display_position, this._size, flip);
     }
 }

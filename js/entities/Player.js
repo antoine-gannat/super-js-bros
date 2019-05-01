@@ -8,8 +8,8 @@ class Player extends Entity {
         this._team = TEAMS.friendly;
     }
 
-    jump() {
-        if (!super.jump())
+    jump(overwrite = false) {
+        if (!super.jump(overwrite))
             return;
         g_game._resManager.playSound("mario_jump");
     }

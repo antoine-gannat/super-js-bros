@@ -19,11 +19,13 @@ class FightManager {
         var friendly = this.getFriendlyEntity(entity1, entity2);
         var enemy = this.getEnemyEntity(entity1, entity2);
 
-        // If the hit comes from the north (up) and it's the friendly entity that is higher
-        // Friendly win
-        if (hit_direction.north) {
+        // If the hit comes from the north (up) or south (down),
+        // depending if the hit was catched from the friendly or enemy entity
+        // And the friendly entity is higher than the enemy (hit on the head)
+        // Then the friendly entity win
+        if (((hit_direction.north || hit_direction.south) && friendly._position.y < enemy._position.y)) {
             // Jump on top of the enemy
-            friendly.forceJump();
+            friendly.jump(true);
             // Kill the neemy
             enemy.die();
         }

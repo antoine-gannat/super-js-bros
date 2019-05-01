@@ -9,6 +9,9 @@ const MAP_WIDTH = Math.round(window.innerWidth / BLOCK_WIDTH);
 // Size in blocks of the starting platform (this platform will be flat)
 const STARTING_PLATFORM_SIZE = 5;
 
+// Gravity
+const GRAVITY_FORCE = Math.round(BLOCK_HEIGHT / 18);
+
 // type of blocks
 const MAP_COMPONENT_TYPES = {
     grass: "grass",

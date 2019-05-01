@@ -1,8 +1,4 @@
 class Physics {
-    constructor() {
-        this._gravity_force = Math.round(BLOCK_HEIGHT / 15);
-    }
-
     // Check if the element has Collision a component
     checkComponentCollision(element, call_callback = true, return_when_found = false) {
         var has_collided = false;
@@ -22,13 +18,13 @@ class Physics {
             if (!collisions.north && !collisions.south && !collisions.west && !collisions.east) {
                 continue;
             }
+            // Call the callback function on the component
+            if (call_callback)
+                component.onCollision(element, collisions);
             if (return_when_found)
                 return (true);
             if (!has_collided)
                 has_collided = true;
-            // Call the callback function on the component
-            if (call_callback)
-                component.onCollision(element, collisions);
         };
         return (has_collided);
     }
@@ -54,46 +50,42 @@ class Physics {
     }
 
     // Check if element1 has collided from the left with element2
-    collidedFromLeft(element1_edges, element2_edges, element1_old_edges) {
-        return (
-            element1_old_edges.top_right.x < element2_edges.top_left.x                // if entity1 was on the left
-            && this.areEntitiesAtSameXLevel(element1_edges, element2_edges)           // and they are at the same x level
-            && this.areEntitiesAtSameYLevel(element1_edges, element2_edges)           // and they are at the same y level
-        );
+    collidedFromLeft(element2_edges, element1_old_edges) {
+        // if element1 was on the left and is now colliding
+        return (element1_old_edges.top_right.x < element2_edges.top_left.x);
     }
 
     // Check if element1 has collided from the right with element2
-    collidedFromRight(element1_edges, element2_edges, element1_old_edges) {
-        return (
-            element1_old_edges.top_left.x >= element2_edges.top_right.x               // if entity1 was on the right
-            && this.areEntitiesAtSameXLevel(element1_edges, element2_edges)           // and they are at the same x level
-            && this.areEntitiesAtSameYLevel(element1_edges, element2_edges)           // and they are at the same y level
-        );
+    collidedFromRight(element2_edges, element1_old_edges) {
+        // if element1 was on the right and is now colliding
+        return (element1_old_edges.top_left.x > element2_edges.top_right.x);
     }
 
     // Check if element1 has collided from the top with element2
-    collidedFromTop(element1_edges, element2_edges, element1_old_edges) {
-        return element1_old_edges.bottom_left.y < element2_edges.top_left.y           // if entity1 was on top
-            && this.areEntitiesAtSameXLevel(element1_edges, element2_edges)           // and they are at the same x level
-            && this.areEntitiesAtSameYLevel(element1_edges, element2_edges)           // and they are at the same y level
+    collidedFromTop(element2_edges, element1_old_edges) {
+        // if element1 was on top and is now colliding
+        return (element1_old_edges.bottom_left.y < element2_edges.top_left.y);
     }
 
     // Check if element1 has collided from the bottom with element2
-    collidedFromBottom(element1_edges, element2_edges, element1_old_edges) {
-        return element1_old_edges.top_left.y > element2_edges.bottom_left.y           // if entity1 was below
-            && this.areEntitiesAtSameXLevel(element1_edges, element2_edges)           // and they are at the same x level
-            && this.areEntitiesAtSameYLevel(element1_edges, element2_edges)           // and they are at the same y level
+    collidedFromBottom(element2_edges, element1_old_edges) {
+        // if element1 was below and is now colliding
+        return (element1_old_edges.top_left.y > element2_edges.bottom_left.y);
     }
 
     // Get the direction from which the entities had a collision (north, south, east or west)
     getCollisionDirection(element1_edges, element2_edges, element1_old_edges) {
         var top = false, bottom = false, left = false, right = false;
 
+        if (!this.areEntitiesAtSameXLevel(element1_edges, element2_edges)          // if the entities are at the same x level
+            || !this.areEntitiesAtSameYLevel(element1_edges, element2_edges))      // and they are at the same y level
+            return ({ west: false, east: false, north: false, south: false });
+
         // Get the origin of the collision
-        left = this.collidedFromLeft(element1_edges, element2_edges, element1_old_edges);
-        right = this.collidedFromRight(element1_edges, element2_edges, element1_old_edges);
-        top = this.collidedFromTop(element1_edges, element2_edges, element1_old_edges);
-        bottom = this.collidedFromBottom(element1_edges, element2_edges, element1_old_edges);
+        left = this.collidedFromLeft(element2_edges, element1_old_edges);
+        right = this.collidedFromRight(element2_edges, element1_old_edges);
+        top = this.collidedFromTop(element2_edges, element1_old_edges);
+        bottom = this.collidedFromBottom(element2_edges, element1_old_edges);
         // Return as directionss
         return ({ west: left, east: right, north: top, south: bottom });
     }
@@ -111,12 +103,12 @@ class Physics {
             var element2_edges = Convertion.getEdgePositions(e._position, e._size);
 
             // Check if the entities are colliding
-            if (this.areEntitiesAtSameXLevel(element1_edges, element2_edges)          // if the entities are at the same x level
-                && this.areEntitiesAtSameYLevel(element1_edges, element2_edges))       // and they are at the same y level
-            {
-                // Fight and kill the losing entity
-                g_game._fightManager.fight(entity, e, this.getCollisionDirection(element1_edges, element2_edges, element1_old_edges));
+            const collisions = this.getCollisionDirection(element1_edges, element2_edges, element1_old_edges);
+            if (!collisions.north && !collisions.south && !collisions.west && !collisions.east) {
+                return;
             }
+            // Fight and kill the losing entity
+            g_game._fightManager.fight(entity, e, collisions);
         });
     }
 
@@ -128,17 +120,14 @@ class Physics {
     // Apply physics rules to entities //
 
     applyGravityToEntity(entity) {
-        // If the entity is jumping or is already touching the ground, leave
-        if (this.checkComponentCollision(entity, false, true) || entity._jumping)
-            return;
-        entity.moveY(this._gravity_force);
+        // Reduce the velocity of the entity by the gravity force 
+        entity.velocity -= GRAVITY_FORCE;
     }
 
     // Return true if the movement is allowed
     allowEntityMovement(entity, new_position) {
         return (!this.checkComponentCollision(
-            { _position: new_position, _size: entity._size, _last_position: entity._last_position },
-            false, true));
+            { _position: new_position, _size: entity._size, _last_position: entity._last_position }));
     }
 
     // Apply physics to each entity
