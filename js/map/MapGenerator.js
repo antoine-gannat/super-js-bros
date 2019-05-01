@@ -20,6 +20,21 @@ class MapGenerator {
             this._last_component_changed = new_component;
     }
 
+    // Get the y value of the highest component in the map at x: 'column'
+    getMapHeightAt(column) {
+        if (column < 0 || column >= this._map_length)
+            return (-1);
+        // Set the height at 0
+        var height = 0;
+        // While we haven't reach the last row and the components are null
+        while (height < this._map[column].length
+            && (this._map[column][height] === null || this._map[column][height]._transparent)) {
+            // Increase the height
+            height++;
+        }
+        return (height);
+    }
+
     // Generation //
 
     // Generate a flat platform at the begining of the map
@@ -57,7 +72,7 @@ class MapGenerator {
     // Return a component that is part of a mountain
     generateMountains(map_col) {
         // Get the last component y position
-        var new_height = this._last_component_changed._position.y;
+        var new_height = this.getMapHeightAt(map_col - 1);
         // 50% of chance to go higher
         var go_higher = Math.round(Math.random());
         // If 'go_higher' is true and we can go higher
@@ -70,6 +85,16 @@ class MapGenerator {
         return (this._componentsFactory.newComponent(MAP_COMPONENT_TYPES.grass, new Position(map_col, new_height)));
     }
 
+    generateCoin(map_col) {
+        // Chance of generation of a coin
+        if (Math.round(Math.random() - 0.3) === 0)
+            return (null);
+        var height = this.getMapHeightAt(map_col);
+        if (height === -1)
+            return (null);
+        return (this._componentsFactory.newComponent(MAP_COMPONENT_TYPES.coin, new Position(map_col, height - 2)));
+    }
+
     // /Generation //
 
     // Generate a new map
@@ -78,14 +103,19 @@ class MapGenerator {
         this.generateStartingPlatform();
 
         for (var map_col = STARTING_PLATFORM_SIZE; map_col < this._map_length; map_col++) {
-            // Create a new component
-            var new_component = this.generateMountains(map_col);
-            // Add the component to the map
-            this.changeMapComponent(new_component);
+            // Create a new component and add it to the map
+            this.changeMapComponent(this.generateMountains(map_col));
             // Fill the rest of the map with dirt components
             this.fillBelowWithComponentType(map_col, MAP_COMPONENT_TYPES.dirt);
+            // Generate a coin
+            var new_coin = this.generateCoin(map_col);
+            if (new_coin)
+                this.changeMapComponent(new_coin);
         }
         this.changeMapComponent(this._componentsFactory.newComponent(MAP_COMPONENT_TYPES.chest, new Position(1, 16)), false);
+        // Display a castle at the end
+        this.changeMapComponent(this._componentsFactory.newComponent(MAP_COMPONENT_TYPES.castle,
+            new Position(this._map_length - 1, this.getMapHeightAt(this._map_length - 1) - 2)), false);
         return (this._map);
     }
 }

@@ -57,7 +57,7 @@ class RessourceSprite extends Ressource {
         }
     }
 
-    renderAt(ctx, position, size, flip) {
+    renderAt(ctx, position, size, flip = new Flip()) {
         // Change to next sprite frame
         this.updateFrameIndex();
 

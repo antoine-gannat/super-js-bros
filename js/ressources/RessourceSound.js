@@ -4,12 +4,14 @@ class RessourceSound extends Ressource {
         this._audio = new Audio(path);
     }
 
-    play() {
+    play(volume) {
         this._audio.currentTime = 0;
         this._audio.play();
+        this._audio.volume = volume;
     }
 
-    playLoop() {
+    playLoop(volume) {
+        this._audio.volume = volume;
         this._audio.currentTime = 0;
         this._audio.addEventListener('ended', function () {
             this.currentTime = 0;

@@ -21,12 +21,14 @@ class RessourceManager {
         // Pre Load sprites
         this._ressources.push(new RessourceSprite("koopa", images_folder_path + "koopa.png", 27, 32, 9, 20));
         this._ressources.push(new RessourceSprite("mario", images_folder_path + "mario.png", 62, 95, 4, 20));
+        this._ressources.push(new RessourceSprite("coin", images_folder_path + "coins.png", 73, 73, 10, 20));
 
         // Load sounds
         this._ressources.push(new RessourceSound("mario_jump", sounds_folder_path + "mario_jump.ogg"));
         this._ressources.push(new RessourceSound("death", sounds_folder_path + "death.ogg"));
         this._ressources.push(new RessourceSound("kill", sounds_folder_path + "kill.ogg"));
         this._ressources.push(new RessourceSound("soundtrack", sounds_folder_path + "soundtrack.ogg"));
+        this._ressources.push(new RessourceSound("coin_catched", sounds_folder_path + "coin.ogg"));
 
         // Render functions
         this._render_fct = [
@@ -56,7 +58,7 @@ class RessourceManager {
     // Sounds //
 
     // Play a specific sound, if 'loop' is true, the sound will be re-played once finished
-    playSound(name, loop = false) {
+    playSound(name, volume = 1.0, loop = false) {
         // If the sound is turned off, we leave
         if (g_game._sounds_muted)
             return;
@@ -69,9 +71,9 @@ class RessourceManager {
             throw new Error("Sound: " + name + " not found");
         // Play the sound in loop
         if (loop === true)
-            sound.playLoop();
+            sound.playLoop(volume);
         else
-            sound.play();
+            sound.play(volume);
     }
 
     //  Stop all sounds currently played
@@ -94,8 +96,9 @@ class RessourceManager {
     render(ressource, position, size, flip) {
         // Search for the ressource's render function
         var render_function = this._render_fct.find((render) => { return (render.type === ressource.type) });
-        if (!render_function)
+        if (!render_function) {
             throw new Error("No render function found for " + ressource.type);
+        }
 
         // Call the render function for this specific ressource
         render_function.fct(ressource, position, size, flip);

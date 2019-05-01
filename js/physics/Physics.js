@@ -1,12 +1,13 @@
 class Physics {
     // Check if the element has Collision a component
-    checkComponentCollision(element, call_callback = true, return_when_found = false) {
+    checkComponentCollision(element, custom_position = null, call_callback = true) {
         var has_collided = false;
         // Get the map components near the player
         var components = g_game._map.getComponentsNearEntity(element);
+        var position_to_check = (custom_position != null ? custom_position : element._position);
 
         // Get the edges 
-        var element1_edges = Convertion.getEdgePositions(element._position, element._size);
+        var element1_edges = Convertion.getEdgePositions(position_to_check, element._size);
         var element1_old_edges = Convertion.getEdgePositions(element._last_position, element._size);
 
         // Check collisions between the element and the component currently on the screen
@@ -21,9 +22,8 @@ class Physics {
             // Call the callback function on the component
             if (call_callback)
                 component.onCollision(element, collisions);
-            if (return_when_found)
-                return (true);
-            if (!has_collided)
+            // If the component is transparent, there is no collision
+            if (!has_collided && !component._transparent)
                 has_collided = true;
         };
         return (has_collided);
@@ -111,12 +111,6 @@ class Physics {
             g_game._fightManager.fight(entity, e, collisions);
         });
     }
-
-    // Return true if the entity is falling
-    isEntityFalling(entity) {
-        return (!this.checkComponentCollision(entity, false, true));
-    }
-
     // Apply physics rules to entities //
 
     applyGravityToEntity(entity) {
@@ -126,8 +120,7 @@ class Physics {
 
     // Return true if the movement is allowed
     allowEntityMovement(entity, new_position) {
-        return (!this.checkComponentCollision(
-            { _position: new_position, _size: entity._size, _last_position: entity._last_position }));
+        return (!this.checkComponentCollision(entity, new_position));
     }
 
     // Apply physics to each entity

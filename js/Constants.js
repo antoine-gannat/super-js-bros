@@ -18,7 +18,8 @@ const MAP_COMPONENT_TYPES = {
     grass: "grass",
     dirt: "dirt",
     castle: "castle",
-    chest: "chest"
+    chest: "chest",
+    coin: "coin"
 };
 
 // type of blocks

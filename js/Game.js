@@ -40,7 +40,7 @@ class Game {
     }
 
     startSoundtrack() {
-        this._resManager.playSound("soundtrack", true);
+        this._resManager.playSound("soundtrack", 0.3, true);
         this._music_started = true;
     }
 

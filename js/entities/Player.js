@@ -7,6 +7,12 @@ class Player extends Entity {
             DIRECTIONS.east);
         this._team = TEAMS.friendly;
         this._lives = STARTING_LIFE_NB;
+        this._coins = 0;
+    }
+
+    increaseCoins() {
+        this._coins++;
+        console.log(this._coins);
     }
 
     jump(overwrite = false) {

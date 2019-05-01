@@ -1,6 +1,6 @@
 class Chest extends MapComponent {
     constructor(position) {
-        super(MAP_COMPONENT_TYPES.chest, position);
+        super(g_game._resManager.getRessourceByName(MAP_COMPONENT_TYPES.chest), position);
     }
 
     onCollision(entity, direction) {

@@ -7,7 +7,7 @@ class RessourceImage extends Ressource {
     }
 
     clone() {
-        return (new RessourceSprite(this._name, this._image.src));
+        return (new RessourceImage(this._name, this._image.src));
     }
 
     renderAt(ctx, position, size, flip = new Flip()) {
