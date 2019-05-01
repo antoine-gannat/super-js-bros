@@ -10,6 +10,8 @@ class Entity {
         this._asset.attachEntity(this);
         this._asset_orientation = asset_orientation;
         this._team = undefined;
+        // Alive status
+        this._alive = true;
         // Velocity of the entity
         this._velocity = 0;
         // Force of a jump
@@ -43,13 +45,20 @@ class Entity {
 
     // Remove the entity from the entities list
     die() {
+        this._alive = false;
         g_game._entityManager.deleteEntity(this._id);
+    }
+
+    revive(revive_position) {
+        this._position = revive_position;
+        this._alive = true;
     }
 
     // Movements //
 
     moveX(xMovement) {
-        if (this._position.x + xMovement < 0)
+        // If the x positon goes below 0 or the entity is dead
+        if (this._position.x + xMovement < 0 || !this._alive)
             return;
         if (!g_game._physics.allowEntityMovement(this,
             new Position(this._position.x + xMovement, this._position.y - 4)))
@@ -66,7 +75,8 @@ class Entity {
     }
 
     moveY(yMovement) {
-        if (this._position.y + yMovement < 0)
+        // If the x positon goes below 0 or the entity is dead
+        if (this._position.y + yMovement < 0 || !this._alive)
             return;
         if (!g_game._physics.allowEntityMovement(this,
             new Position(this._position.x, this._position.y + yMovement))) {
@@ -88,6 +98,8 @@ class Entity {
     // The entity jump
     // If 'overwrite' is true, the entity will jump ignoring every restrictions 
     jump(overwrite = false) {
+        if (!this._alive)
+            return;
         // If the player is currently jumping or falling, leave
         if (!overwrite && (this._in_the_air || this._jump_distance > 0)) {
             return (false);
@@ -110,6 +122,8 @@ class Entity {
     }
 
     render() {
+        if (!this._alive)
+            return;
         // Move on the y axis according to the velocity
         // The velocity is set to its negative value because the y0 is at the top of the screen
         this.moveY(-this._velocity);

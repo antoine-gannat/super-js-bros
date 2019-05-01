@@ -21,10 +21,16 @@
     <button class="btn" id="sound-mute-btn" onclick="g_game.switchMuteSounds()">
         <i id="sound-mute-icon" class="fas fa-volume-up"></i>
     </button>
-    <!-- Game over screen -->
-    <div id="restart-container" class="container text-center">
-        <h2>Game Over !</h2>
+    <!-- Restart screen -->
+    <div id="restart-screen" class="container text-center death-container">
+        <h2 id="restart-text">You died !</h2>
+        <p><span id="lives_remaining"></span> lives left.</p>
         <button class="btn btn-primary" onclick="g_game.restart()">Restart</button>
+    </div>
+    <!-- Game over screen -->
+    <div id="gameover-screen" class="container text-center death-container">
+        <h2>Game Over !</h2>
+        <button class="btn btn-primary" onclick="window.location.reload()">Restart</button>
     </div>
     <!-- Import scripts -->
     <script src="js/Constants.js"></script>

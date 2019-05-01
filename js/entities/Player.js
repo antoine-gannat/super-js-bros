@@ -6,6 +6,7 @@ class Player extends Entity {
             g_game._resManager.getRessourceByName("mario").clone(),
             DIRECTIONS.east);
         this._team = TEAMS.friendly;
+        this._lives = STARTING_LIFE_NB;
     }
 
     jump(overwrite = false) {
@@ -18,7 +19,7 @@ class Player extends Entity {
         // Call the parent function
         super.die();
 
-        // Call the game over function
-        g_game.gameover();
+        // Call the onPlayerDeath from the game class to handle the death
+        g_game.onPlayerDeath();
     }
 }

@@ -44,24 +44,32 @@ class Game {
         this._music_started = true;
     }
 
-    gameover() {
+    onPlayerDeath() {
         // Play the gameover sound
         this._resManager.stopSound("soundtrack");
         this._resManager.playSound("death");
         // Set the variable player to null
-        this._player = null;
-        // Display the gameover screen
-        this._HTMLManager.displayGameOverScreen();
         this._music_started = false;
+        this._player._lives--;
+        if (this._player._lives === 0) {
+            // Display the gameover screen
+            this._HTMLManager.displayGameOverScreen();
+        }
+        else {
+            // Display the restart screen
+            this._HTMLManager.displayRestartScreen();
+        }
     }
 
     restart() {
-        this._player = new Player();
+        // Reset the player's position
+        this._player.revive(new Position(0, (MAP_HEIGHT - 5) * BLOCK_HEIGHT));
+        // Add the player to the entity manager
         this._entityManager.addNewEntity(this._player);
         // Reset the map offset
         this._map._display_position_offset = 0;
-        // Hide the gameover screen
-        this._HTMLManager.hideGameOverScreen();
+        // Hide all screens
+        this._HTMLManager.hideAllScreens();
     }
 
     // Turn on or off the sound
