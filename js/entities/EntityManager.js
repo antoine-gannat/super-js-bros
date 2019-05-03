@@ -24,7 +24,7 @@ class EntityManager {
 
     // Return the entities present on the screen
     getEntitiesOnScreen() {
-        return this._entities.filter((e) => {
+        return this.getEntities().filter((e) => {
             return (e._position.x - g_game._map._display_position_offset >= 0
                 && e._position.x - g_game._map._display_position_offset <= window.innerWidth);
         });
@@ -39,6 +39,10 @@ class EntityManager {
             return;
         // Remove the entity from the entities array
         this._entities.splice(entity_index, 1);
+    }
+
+    getEntities() {
+        return (this._entities);
     }
 
     render() {

@@ -23,6 +23,5 @@ class RessourceImage extends Ressource {
             size.height);
         // Restore the last saved state
         ctx.restore();
-
     }
 }

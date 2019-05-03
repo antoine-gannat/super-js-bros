@@ -8,6 +8,8 @@ const BLOCK_HEIGHT = window.innerHeight / MAP_HEIGHT;
 const MAP_WIDTH = Math.round(window.innerWidth / BLOCK_WIDTH);
 // Size in blocks of the starting platform (this platform will be flat)
 const STARTING_PLATFORM_SIZE = 5;
+// Size in blocks of the ending platform (this platform will be flat)
+const ENDING_PLATFORM_SIZE = 7;
 // Number of lifes before game over
 const STARTING_LIFE_NB = 3;
 // Gravity

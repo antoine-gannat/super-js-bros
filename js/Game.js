@@ -100,5 +100,8 @@ class Game {
 
         // Render the uis
         this._uiManager.render();
+
+        // Render static ressources
+        this._resManager.renderStaticRessources();
     }
 }

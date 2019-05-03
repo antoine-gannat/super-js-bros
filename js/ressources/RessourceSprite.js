@@ -26,16 +26,13 @@ class RessourceSprite extends Ressource {
         this._attached_entity = entity;
     }
 
-    renderStatic() {
-
-    }
-
     updateFrameIndex() {
+        var animation_finished = false;
         // If an entity is attached and is not moving
         // We keep the frame index to 0, in order to display the first frame only
         if (this._attached_entity && !this._attached_entity._has_moved) {
             this._frame_index = 0;
-            return;
+            return (animation_finished);
         }
         // Decrease the number of render remaining for this frame
         this._render_remaining--;
@@ -47,19 +44,24 @@ class RessourceSprite extends Ressource {
         }
         // if we have displayed every frame of the sprite
         // Set the frame index to 0
-        if (this._frame_index >= this._frame_number)
+        if (this._frame_index >= this._frame_number) {
             this._frame_index = 0;
+            // The animation is finished
+            animation_finished = true;
+        }
         // If the entity has moved and the sprite has been rendered
         // We set the 'has_moved' variable on the entity to false
         if (this._attached_entity && this._attached_entity._has_moved
             && this._frame_index == 0) {
             this._attached_entity._has_moved = false;
         }
+        return (animation_finished);
     }
 
+    // Return false when the animation is finished
     renderAt(ctx, position, size, flip = new Flip()) {
         // Change to next sprite frame
-        this.updateFrameIndex();
+        var animation_finished = this.updateFrameIndex();
 
         // Save the current state
         ctx.save();
@@ -78,5 +80,6 @@ class RessourceSprite extends Ressource {
             size.height);
         // Restore the last saved state
         ctx.restore();
+        return (!animation_finished);
     }
 }

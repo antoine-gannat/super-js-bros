@@ -44,8 +44,8 @@ class Physics {
         return (
             (element1_edges.top_left.x >= element2_edges.top_left.x
                 && element1_edges.top_left.x <= element2_edges.top_right.x)
-            || (element1_edges.top_left.x <= element2_edges.top_left.x
-                && element2_edges.top_left.x <= element1_edges.top_right.x)
+            || (element1_edges.top_right.x >= element2_edges.top_left.x
+                && element1_edges.top_right.x <= element2_edges.top_right.x)
         );
     }
 
@@ -125,7 +125,7 @@ class Physics {
 
     // Apply physics to each entity
     applyPhysics() {
-        g_game._entityManager._entities.forEach((e) => {
+        g_game._entityManager.getEntities().forEach((e) => {
             // Apply the gravity
             this.applyGravityToEntity(e);
 

@@ -47,7 +47,19 @@ class Entity {
     // Remove the entity from the entities list
     die() {
         this._alive = false;
-        g_game._entityManager.deleteEntity(this._id);
+    }
+
+    // Play an animation
+    deathAnimation() {
+        // Increase the y position
+        this._position.y += 3;
+        // If the height is out of the screen
+        // Return false
+        if (this._position.y > window.innerHeight)
+            return (false);
+        // Render the asset
+        this.renderAsset();
+        return (true);
     }
 
     revive(revive_position) {
@@ -96,8 +108,9 @@ class Entity {
         // Update the position
         this._position.y += yMovement;
         // If the player fell out of the world
-        if (this._position.y > MAP_HEIGHT * BLOCK_HEIGHT)
+        if (this._position.y > window.innerHeight && this._alive) {
             this.die();
+        }
     }
 
     // The entity jump
@@ -126,19 +139,30 @@ class Entity {
         return (this._in_the_air && this._velocity < 0);
     }
 
-    render() {
-        if (!this._alive)
-            return;
-        // Move on the y axis according to the velocity
-        // The velocity is set to its negative value because the y0 is at the top of the screen
-        this.moveY(-this._velocity);
-        this.updateJump();
-
+    renderAsset() {
         // If a custom position exist
         var flip = new Flip((this._direction !== this._asset_orientation));
         // Calculate the position to display according to the map offst
         var display_position = new Position(this._position.x - g_game._map._display_position_offset, this._position.y);
         // Display the entity
         g_game._resManager.render(this._asset, display_position, this._size, flip);
+    }
+
+    render() {
+        // If the entity is dead
+        if (!this._alive) {
+            // Play the death animation
+            // If the animation is finished, delete the entity
+            if (!this.deathAnimation())
+                g_game._entityManager.deleteEntity(this._id);
+            return;
+        }
+        // Move on the y axis according to the velocity
+        // The velocity is set to its negative value because the y0 is at the top of the screen
+        this.moveY(-this._velocity);
+        this.updateJump();
+
+        // Render the asset
+        this.renderAsset();
     }
 }

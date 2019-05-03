@@ -7,6 +7,9 @@ class Chest extends MapComponent {
         // If hit comes from somewhere else than underneath, return
         if (direction.south === false)
             return;
+
+        entity.increaseCoins(10);
+        g_game._resManager.playSound("coin_catched");
         this.destroy();
     }
 }

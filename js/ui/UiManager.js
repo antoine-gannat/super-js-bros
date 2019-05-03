@@ -4,6 +4,7 @@ class UiManager {
 
         // Add uis
         this._uis.push(new UiMute());
+        this._uis.push(new UiPlayerStatus());
     }
 
     checkClickEvent(e) {

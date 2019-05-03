@@ -1,7 +1,7 @@
 class MapGenerator {
     constructor(map_length, map_height) {
-        if (!map_length || map_length < 10)
-            throw new Error("The map length must be at least 10");
+        if (!map_length || map_length < STARTING_PLATFORM_SIZE + ENDING_PLATFORM_SIZE + 1)
+            throw new Error("The map length must be at least " + STARTING_PLATFORM_SIZE + ENDING_PLATFORM_SIZE + 1);
         // Save the length of the map
         this._map_length = map_length;
         this._map_height = map_height;
@@ -11,6 +11,9 @@ class MapGenerator {
 
         // Last component changed
         this._last_component_changed = null;
+
+        // Generation constants
+        this._free_top_components = 3;
     }
 
     // Change the component at position 'new_component._position' by 'new_component'
@@ -51,6 +54,24 @@ class MapGenerator {
         }
     }
 
+    // Generate a flat platform at the end of the map
+    generateEndingPlatform() {
+        // The starting height is at the last row of the map
+        const platform_height = this.getMapHeightAt(this._map_length - ENDING_PLATFORM_SIZE - 1);
+        // Generate 5 blocs of grass
+        for (var map_col = this._map_length - ENDING_PLATFORM_SIZE; map_col < this._map_length; map_col++) {
+            // Create a new component
+            var new_component = this._componentsFactory.newComponent(MAP_COMPONENT_TYPES.grass,
+                new Position(map_col, platform_height));
+            // Add the component 'new_component' to the map at position x: 'map_col', y: 'platform_height' 
+            this.changeMapComponent(new_component);
+            this.fillBelowWithComponentType(map_col, MAP_COMPONENT_TYPES.dirt);
+        }
+        // Add a castle at the end
+        this.changeMapComponent(this._componentsFactory.newComponent(MAP_COMPONENT_TYPES.castle,
+            new Position(this._map_length - Math.floor(ENDING_PLATFORM_SIZE / 2), platform_height - 2)), false);
+    }
+
     // Fill with component of type: 'component_type' below the first non-null component of column: 'column'
     fillBelowWithComponentType(column, component_type) {
         var component_found = false;
@@ -75,11 +96,12 @@ class MapGenerator {
         var new_height = this.getMapHeightAt(map_col - 1);
         // 50% of chance to go higher
         var go_higher = Math.round(Math.random());
-        // If 'go_higher' is true and we can go higher
-        if (go_higher && new_height - 1 >= 0)
+        var stay_same_height = Math.round(Math.random());
+        // If 'go_higher' is true and there is at least '_free_top_components' null components
+        if (go_higher && new_height - this._free_top_components >= 0 && !stay_same_height)
             new_height--;
         // Otherwise
-        else if (!go_higher && new_height + 1 < MAP_HEIGHT)
+        else if (!go_higher && new_height + 1 < MAP_HEIGHT && !stay_same_height)
             new_height++;
         // Return the new component
         return (this._componentsFactory.newComponent(MAP_COMPONENT_TYPES.grass, new Position(map_col, new_height)));
@@ -97,12 +119,17 @@ class MapGenerator {
 
     // /Generation //
 
+    generateSpecialComponents() {
+        // Add a chest
+        this.changeMapComponent(this._componentsFactory.newComponent(MAP_COMPONENT_TYPES.chest, new Position(1, 16)), false);
+    }
+
     // Generate a new map
     generate() {
         // Generate a flat platform at the begining of each map
         this.generateStartingPlatform();
 
-        for (var map_col = STARTING_PLATFORM_SIZE; map_col < this._map_length; map_col++) {
+        for (var map_col = STARTING_PLATFORM_SIZE; map_col < this._map_length - ENDING_PLATFORM_SIZE; map_col++) {
             // Create a new component and add it to the map
             this.changeMapComponent(this.generateMountains(map_col));
             // Fill the rest of the map with dirt components
@@ -112,10 +139,8 @@ class MapGenerator {
             if (new_coin)
                 this.changeMapComponent(new_coin);
         }
-        this.changeMapComponent(this._componentsFactory.newComponent(MAP_COMPONENT_TYPES.chest, new Position(1, 16)), false);
-        // Display a castle at the end
-        this.changeMapComponent(this._componentsFactory.newComponent(MAP_COMPONENT_TYPES.castle,
-            new Position(this._map_length - 1, this.getMapHeightAt(this._map_length - 1) - 2)), false);
+        this.generateEndingPlatform();
+        this.generateSpecialComponents();
         return (this._map);
     }
 }

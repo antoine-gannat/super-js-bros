@@ -10,8 +10,8 @@ class Player extends Entity {
         this._coins = 0;
     }
 
-    increaseCoins() {
-        this._coins++;
+    increaseCoins(amount = 1) {
+        this._coins += amount;
     }
 
     jump(overwrite = false) {

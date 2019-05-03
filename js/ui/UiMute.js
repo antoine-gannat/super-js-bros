@@ -1,6 +1,6 @@
 class UiMute extends Ui {
     constructor() {
-        super("mute", new Position(0, 0), new Size(30, 30));
+        super("mute", new Position(10, 0), new Size(30, 30));
         this._icon_muted = g_game._resManager.getRessourceByName("mute-icon");
         this._icon_sound = g_game._resManager.getRessourceByName("sound-icon");
         // If true, no sound will be played

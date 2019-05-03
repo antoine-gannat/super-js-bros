@@ -19,11 +19,13 @@ class RessourceManager {
         this._ressources.push(new RessourceImage("chest", images_folder_path + "chest.png"));
         this._ressources.push(new RessourceImage("mute-icon", images_folder_path + "mute.png"));
         this._ressources.push(new RessourceImage("sound-icon", images_folder_path + "sound.png"));
+        this._ressources.push(new RessourceImage("mario-head", images_folder_path + "mario_head.png"));
 
         // Pre Load sprites
         this._ressources.push(new RessourceSprite("koopa", images_folder_path + "koopa.png", 27, 32, 9, 20));
         this._ressources.push(new RessourceSprite("mario", images_folder_path + "mario.png", 62, 95, 4, 20));
         this._ressources.push(new RessourceSprite("coin", images_folder_path + "coins.png", 73, 73, 10, 20));
+        this._ressources.push(new RessourceSprite("explosion", images_folder_path + "explosion_sprite.png", 38, 37, 28, 5));
 
         // Load sounds
         this._ressources.push(new RessourceSound("mario_jump", sounds_folder_path + "mario_jump.ogg"));
@@ -37,6 +39,8 @@ class RessourceManager {
             { type: RESSOURCE_TYPES.image, fct: this.renderImage.bind(this) },
             { type: RESSOURCE_TYPES.sprite, fct: this.renderSprite.bind(this) },
         ];
+
+        this._static_ressources = [];
     }
 
     getRessourceByName(name) {
@@ -47,12 +51,12 @@ class RessourceManager {
 
     // Display an image
     renderImage(image, position, size, flip) {
-        image.renderAt(this._ctx, position, size, flip);
+        return image.renderAt(this._ctx, position, size, flip);
     }
 
     // Display a sprite
     renderSprite(sprite, position, size, flip) {
-        sprite.renderAt(this._ctx, position, size, flip);
+        return sprite.renderAt(this._ctx, position, size, flip);
     }
 
     // /Render //
@@ -95,14 +99,30 @@ class RessourceManager {
 
     // /Sounds //
 
+    // Render ressources not attached to any component or entity
+    renderStaticRessources() {
+        // For each static ressource
+        this._static_ressources.map((ressource, index) => {
+            // Get the position based on the map offset
+            var position = new Position(ressource.position.x - g_game._map._display_position_offset, ressource.position.y);
+
+            // Render the ressource
+            // If the return value is false, remove the ressource from the list
+            if (this.render(ressource.asset, position, ressource.size) === false) {
+                this._static_ressources.splice(index, 1);
+            }
+        });
+    }
+
     render(ressource, position, size, flip) {
         // Search for the ressource's render function
         var render_function = this._render_fct.find((render) => { return (render.type === ressource.type) });
+        // If the render function does not exist, throw an error
         if (!render_function) {
             throw new Error("No render function found for " + ressource.type);
         }
 
         // Call the render function for this specific ressource
-        render_function.fct(ressource, position, size, flip);
+        return render_function.fct(ressource, position, size, flip);
     }
 }
