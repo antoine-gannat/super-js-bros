@@ -1,7 +1,7 @@
 class Koopa extends Enemy {
     constructor(position) {
         super(position,
-            new Size(40, 85),
+            new Size(BLOCK_WIDTH - 5, BLOCK_HEIGHT * 1.5),
             new Speed(BLOCK_WIDTH / 100, BLOCK_WIDTH / 10),
             g_game._resManager.getRessourceByName("koopa").clone(),
             DIRECTIONS.west);
