@@ -3,8 +3,9 @@ class UiMute extends Ui {
         super("mute", new Position(10, 0), new Size(30, 30));
         this._icon_muted = g_game._resManager.getRessourceByName("mute-icon");
         this._icon_sound = g_game._resManager.getRessourceByName("sound-icon");
+
         // If true, no sound will be played
-        this._sounds_muted = false;
+        this._sounds_muted = (localStorage.getItem('muted') === 'true');
     }
 
     onClick(e) {
@@ -14,12 +15,15 @@ class UiMute extends Ui {
     // Turn on or off the sound
     switchMuteSounds() {
         // If the sound is already muted, we unmute
-        if (this._sounds_muted)
+        if (this._sounds_muted) {
+            localStorage.setItem('muted', false);
             this._sounds_muted = false;
+        }
         // Otherwise we mute the sound
         else {
             this._sounds_muted = true;
             g_game._resManager.stopAllSounds();
+            localStorage.setItem('muted', true);
         }
     }
 

@@ -5,6 +5,12 @@ class HTMLManager {
     updateLivesRemaining() {
         var lives_remaining_span = document.getElementById("lives_remaining");
         lives_remaining_span.innerHTML = g_game._player._lives;
+        if (g_game._player._lives > 1) {
+            lives_remaining_span.innerHTML += " lives remaining";
+        }
+        else {
+            lives_remaining_span.innerHTML += " life remaining";
+        }
     }
 
     displayRestartScreen() {
